@@ -1,5 +1,5 @@
 # [更名]安装防护模块（com.install.appinstall.xl）
-基于Android底层Hook技术的应用防护XP模块，核心实现应用安装状态伪造，拦截恶意安装检测，绕过应用强制安装限制，保护设备应用列表隐私。
+基于Android底层Hook技术的安装防护模块[原:伪造安装模块]，核心实现应用安装状态伪造，拦截恶意安装检测，绕过应用强制安装限制，保护设备应用列表隐私。
 
 
 [![Android](https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white)](https://github.com/yijun01/com.install.appinstall.xl) [![Xposed](https://img.shields.io/badge/Xposed-Module-34a853?logo=android&logoColor=white)](https://github.com/yijun01/com.install.appinstall.xl) [![LSPosed](https://img.shields.io/badge/LSPosed-Supported-34a853?logoColor=white)](https://github.com/yijun01/com.install.appinstall.xl) [![LSPatch](https://img.shields.io/badge/LSPatch-Supported-34a853?logoColor=white)](https://github.com/yijun01/com.install.appinstall.xl) [![Root](https://img.shields.io/badge/Root-Supported-34a853?logo=lock&logoColor=white)](https://github.com/yijun01/com.install.appinstall.xl) [![GitHub](https://img.shields.io/badge/GitHub-OpenSource-34a853?logo=github&logoColor=white)](https://github.com/yijun01/com.install.appinstall.xl)
