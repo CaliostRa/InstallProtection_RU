@@ -137,5 +137,4 @@ https://github.com/yijun01/com.install.appinstall.xl
 
 [![](https://img.shields.io/github/downloads/yijun01/com.install.appinstall.xl/total?logo=github&label=Total%20Downloads&labelColor=2dba4e&color=2dba4e)](https://github.com/yijun01/com.install.appinstall.xl)
 
-⭐ [![](https://img.shields.io/github/stars/yijun01/com.install.appinstall.xl?style=social&theme=dark)](https://github.com/yijun01/com.install.appinstall.xl)
-
+⭐ [![](https://img.shields.io/github/stars/yijun01/com.install.appinstall.xl?style=social&theme=dark)](https://github.com/yijun01/com.install.appinstall.xl) ⭐
