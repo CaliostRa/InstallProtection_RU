@@ -139,4 +139,5 @@ https://github.com/yijun01/com.install.appinstall.xl
 
 ⭐ **Star** ⭐ 
 
-[![](https://api.star-history.com/svg?repos=yijun01/com.install.appinstall.xl&type=Date&theme=dark)](https://github.com/yijun01/com.install.appinstall.xl)
+[![](assets/star-chart.svg)](https://github.com/yijun01/com.install.appinstall.xl)
+
