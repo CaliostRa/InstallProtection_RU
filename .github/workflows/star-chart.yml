@@ -1,0 +1,34 @@
+name: Auto Update Star Chart
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  gen_chart:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main  
+
+      - name: Generate dark star chart
+        uses: xingkongliang/star-history-svg@v1
+        with:
+          repo: yijun01/com.install.appinstall.xl
+          out: assets/star-chart.svg
+          theme: dark
+          width: 800
+          height: 300
+
+      - name: Commit and push svg
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/star-chart.svg
+          git commit -m "auto update star chart" || echo "No star data changes, skip commit"
+          git push origin HEAD:${{ github.ref_name }}
