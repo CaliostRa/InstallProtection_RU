@@ -30,6 +30,11 @@
 - 便捷使用：支持 LSPatch 非 ROOT 方案
 - 整治跳转：拦截应用间恶意唤起和网页强制重定向
 - 限制破除：解除截屏/录屏限制和界面锁定
+<img width="1214" height="1768" alt="安装防护模块7" src="https://github.com/user-attachments/assets/113f412f-65c8-4c33-8a49-40b1e92e519b" />
+<img width="1215" height="2182" alt="安装防护模块8" src="https://github.com/user-attachments/assets/78fbf8c9-b75d-4276-882d-d35a6c88d86f" />
+<img width="1216" height="1858" alt="安装防护模块9" src="https://github.com/user-attachments/assets/9373d1f3-fc50-4543-976f-4df6079964e9" />
+<img width="1215" height="1722" alt="安装防护模块10" src="https://github.com/user-attachments/assets/d9631f3b-40b8-4577-b999-bcab4844a7ee" />
+<img width="1215" height="1175" alt="安装防护模块11" src="https://github.com/user-attachments/assets/02f89c9d-1e6c-46e4-9382-09c7e2941223" />
 
 ---
 
@@ -57,6 +62,7 @@
 | **配置导出** | 路径：`/storage/emulated/0/Android/data/目标包名/files/installcf_包名_时间戳.json` |
 | **配置导入** | 新文件需在`/storage/emulated/0/Android/data/目标包名/`路径下才能识别，暂不支持使用文件选择器。 |
 >配置导入导出支持个性化配置（注：不支持导出含自动捕获的包名）
+<img width="1079" height="489" alt="安装防护模块5" src="https://github.com/user-attachments/assets/e4143932-0b70-4f18-9eb8-5c486a86f48e" />
 
 ### 权限防护
 
@@ -64,6 +70,7 @@
 | :--- | :--- |
 | **权限虚假授权** | 授权应用列表权限，支持自定义授权其余权限。 |
 | **虚假分享回调** | 虚假分享 官方SDK 回调，使应用认为分享成功。 |
+<img width="8192" height="7402" alt="安装防护模块4" src="https://github.com/user-attachments/assets/6c1b9141-dbee-470c-9a02-522e94c8ee22" />
 
 ### 第三方启动跳转/退出拦截
 
@@ -72,6 +79,7 @@
 | **启动拦截** | 提供精细三种控制：真实启动 / 虚假启动/ 取消启动。 |
 | **退出拦截** | 拦截因查询的包触发的退出，(普通/超强)两种模式适配不同场景。 |
 | **黑/白名单** | 同步记录操作，启动拦截支持 `*` 模糊匹配符、`!` 反向排除符。 |
+<img width="8192" height="3124" alt="安装防护模块3" src="https://github.com/user-attachments/assets/4edbb368-fa62-4431-9954-8320f3fd4481" />
 
 ### 基础环境隐藏
 
@@ -79,6 +87,7 @@
 | :--- | :--- |
 | **痕迹隐藏** | 隐藏 Root、ADB、Xposed框架等。 |
 | **网络隐藏** | 简单隐藏 VPN 连接及SSL代理配置。 |
+<img width="8192" height="4932" alt="安装防护模块2" src="https://github.com/user-attachments/assets/559cb68b-9ffc-4146-9491-16a03a18de89" />
 
 ### 辅助功能
 
@@ -87,6 +96,7 @@
 | **SELinux 状态伪装** | 伪装 SELinux 模式，绕过系统环境完整性检测。 |
 | **禁止截屏/录屏阻断** | 强行阻断 `FLAG_SECURE`，允许截屏/录屏。 |
 | **应用返回键逻辑替换** | 应对强制锁定界面无法退出(仅适配多Activity架构)。 |
+<img width="8192" height="2678" alt="安装防护模块1" src="https://github.com/user-attachments/assets/9ab7cd7b-2125-4f83-a1ed-b7f2120d883d" />
 
 ---
 
