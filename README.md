@@ -30,7 +30,7 @@
 - 便捷使用：支持 LSPatch 非 ROOT 方案
 - 整治跳转：拦截应用间恶意唤起和网页强制重定向
 - 限制破除：解除截屏/录屏限制和界面锁定
-<img width="1214" height="1768" alt="安装防护模块7" src="https://github.com/user-attachments/assets/113f412f-65c8-4c33-8a49-40b1e92e519b" />
+<img alt="安装防护模块7" src="https://github.com/user-attachments/assets/113f412f-65c8-4c33-8a49-40b1e92e519b" />
 <img width="1215" height="2182" alt="安装防护模块8" src="https://github.com/user-attachments/assets/78fbf8c9-b75d-4276-882d-d35a6c88d86f" />
 <img width="1216" height="1858" alt="安装防护模块9" src="https://github.com/user-attachments/assets/9373d1f3-fc50-4543-976f-4df6079964e9" />
 <img width="1215" height="1722" alt="安装防护模块10" src="https://github.com/user-attachments/assets/d9631f3b-40b8-4577-b999-bcab4844a7ee" />
