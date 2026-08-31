@@ -365,8 +365,8 @@ class LocalizationPipelineTest(unittest.TestCase):
             content = (decoded / "res/values-ru/strings.xml").read_text(
                 encoding="utf-8"
             )
-        self.assertIn("Защита установки", content)
-        self.assertIn("InstallProtectionR", content)
+        self.assertIn("Install Protection RU", content)
+        self.assertIn("InstallProtection_RU", content)
         self.assertIn("yijun01", content)
 
     def test_russian_resource_update_preserves_upstream_entries(self):
@@ -389,7 +389,7 @@ class LocalizationPipelineTest(unittest.TestCase):
             values = {
                 node.attrib["name"]: node.text for node in document.findall("string")
             }
-        self.assertEqual("Защита установки", values["app_name"])
+        self.assertEqual("Install Protection RU", values["app_name"])
         self.assertEqual("Сохранить меня", values["upstream_only"])
 
     def test_bad_download_checksum_removes_partial_file(self):

@@ -1,6 +1,6 @@
 # Уведомление о форке и лицензии
 
-InstallProtectionR является неофициальной русской модификацией Install Protection.
+InstallProtection_RU является неофициальной русской модификацией Install Protection.
 
 - Основа: Install Protection `2.1.60 (234)`.
 - Оригинальный автор: yijun01 / 永恒之蓝（小淋）.

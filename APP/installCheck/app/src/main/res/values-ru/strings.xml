@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Защита установки</string>
+    <string name="app_name">Install Protection RU</string>
     <string name="xposed_activated">Xposed: активирован</string>
     <string name="xposed_unactivated">Xposed: не активирован</string>
-    <string name="xposed_xiaolin">InstallProtectionR — Защита установки\nОсновано на Install Protection\nОригинальный автор: yijun01 / 永恒之蓝(小淋)</string>
+    <string name="xposed_xiaolin">InstallProtection_RU — Защита установки\nОсновано на Install Protection\nОригинальный автор: yijun01 / 永恒之蓝(小淋)</string>
     <string name="module_title">Модуль защиты приложений</string>
-    <string name="module_subtitle">InstallProtectionR · русский форк</string>
+    <string name="module_subtitle">InstallProtection_RU · русский форк</string>
     <string name="module_status_active">Модуль активирован</string>
     <string name="module_status_inactive">Модуль не активирован</string>
     <string name="module_status_card_visible">Значок: показан</string>
@@ -25,7 +25,7 @@
     <string name="bottom_link_forum_toast">Открываю профиль MT Forum</string>
     <string name="bottom_link_repo_toast">Открываю репозиторий модуля</string>
     <string name="bottom_disclaimer">Только для личного изучения и тестирования. Коммерческое использование запрещено.</string>
-    <string name="about_fork_note">InstallProtectionR — русская локализация Install Protection. Оригинальный автор: yijun01 / 永恒之蓝（小淋）. Лицензия upstream: GPL-3.0 с дополнительным уведомлением. Upstream: github.com/yijun01/com.install.appinstall.xl. RU source: github.com/CaliostRa/InstallProtectionR</string>
+    <string name="about_fork_note">InstallProtection_RU — русская локализация Install Protection. Оригинальный автор: yijun01 / 永恒之蓝（小淋）. Лицензия upstream: GPL-3.0 с дополнительным уведомлением. Upstream: github.com/yijun01/com.install.appinstall.xl. RU source: github.com/CaliostRa/InstallProtection_RU</string>
     <string name="launcher_icon_show">Показать значок на рабочем столе</string>
     <string name="launcher_icon_hide">Скрыть значок на рабочем столе\nможет потребоваться перезагрузка лаунчера/устройства</string>
     <string name="launcher_icon_control">Управление значком</string>

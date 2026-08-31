@@ -1,6 +1,6 @@
-# InstallProtectionR — Защита установки
+# InstallProtection_RU — русский форк Install Protection
 
-Это неофициальный русский форк Android/Xposed-модуля [Install Protection](https://github.com/yijun01/com.install.appinstall.xl). В форке переведены интерфейс, диалоги, плавающее окно и пользовательские журналы; алгоритмы hooks и package name `com.install.appinstall.xl` сохранены. Имя форка — `InstallProtectionR`, название приложения — «Защита установки».
+Это неофициальный русский форк Android/Xposed-модуля [Install Protection](https://github.com/yijun01/com.install.appinstall.xl). В форке переведены интерфейс, диалоги, плавающее окно и пользовательские журналы; алгоритмы hooks и package name `com.install.appinstall.xl` сохранены. Имя форка — `InstallProtection_RU`, отображаемое имя приложения — `Install Protection RU`.
 
 Проект не является форком самого LSPatch и не аффилирован с его разработчиками: LSPatch здесь только один из поддерживаемых способов запуска модуля.
 
@@ -64,8 +64,8 @@ NetCloak в проект не включён. Install Protection RU и NetCloak 
 
 ## Установка через LSPosed
 
-1. Установите APK `InstallProtectionR-2.1.60-release-unsigned.apk`. Для unsigned APK потребуется подписать файл своим ключом перед установкой.
-2. Откройте LSPosed → «Модули» → «Защита установки».
+1. Установите APK `InstallProtection_RU-2.1.60-release-unsigned.apk`. Для unsigned APK потребуется подписать файл своим ключом перед установкой.
+2. Откройте LSPosed → «Модули» → `Install Protection RU`.
 3. Включите модуль.
 4. Отметьте только нужные целевые приложения. Не выбирайте системные приложения.
 5. Полностью остановите и снова запустите целевое приложение.
@@ -78,7 +78,7 @@ NetCloak в проект не включён. Install Protection RU и NetCloak 
 LSPatch
 → выбрать APK целевого приложения
 → Embedded mode
-→ выбрать «Защита установки»
+→ выбрать Install Protection RU
 → Patch
 → установить пропатченный APK
 ```
@@ -128,8 +128,8 @@ export JAVA_HOME=/path/to/jdk-17
 Результаты:
 
 ```text
-build/outputs/apk/debug/InstallProtectionR-2.1.60-debug-unsigned.apk
-build/outputs/apk/release/InstallProtectionR-2.1.60-release-unsigned.apk
+build/outputs/apk/debug/InstallProtection_RU-2.1.60-debug-unsigned.apk
+build/outputs/apk/release/InstallProtection_RU-2.1.60-release-unsigned.apk
 ```
 
 Сборка загружает только официальный upstream APK и Apktool по HTTPS, после чего проверяет оба SHA256. Приватные ключи в репозитории отсутствуют.
@@ -149,7 +149,7 @@ git fetch upstream --tags
 
 - оригинальный проект: [yijun01/com.install.appinstall.xl](https://github.com/yijun01/com.install.appinstall.xl);
 - оригинальный автор: yijun01 / 永恒之蓝（小淋）;
-- исходный код RU-изменений: [CaliostRa/InstallProtectionR](https://github.com/CaliostRa/InstallProtectionR);
+- исходный код RU-изменений: [CaliostRa/InstallProtection_RU](https://github.com/CaliostRa/InstallProtection_RU);
 - русская локализация: неофициальный RU fork;
 - upstream заявляет GPL-3.0, но одновременно добавляет дополнительное ограничение; см. [NOTICE_RU.md](NOTICE_RU.md);
 - оригинальный файл `LICENSE` и copyright notices сохранены.

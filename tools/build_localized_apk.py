@@ -408,17 +408,17 @@ def write_russian_resources(decoded: Path) -> None:
         resources = ElementTree.Element("resources")
         tree = ElementTree.ElementTree(resources)
     values = {
-        "app_name": "Защита установки",
+        "app_name": "Install Protection RU",
         "xposed_activated": "Xposed: активирован",
         "xposed_unactivated": "Xposed: не активирован",
         "xposed_xiaolin": (
             "Защита от принудительной установки сторонних приложений\n"
             "Оригинальный автор: yijun01 / 永恒之蓝(小淋)\n"
             "Основано на Install Protection 2.1.60 (234)\n"
-            "InstallProtectionR — русская локализация / RU fork\n"
+            "InstallProtection_RU — русская локализация / RU fork\n"
             "Лицензия upstream: GPL-3.0 с дополнительным уведомлением\n"
             "Upstream: github.com/yijun01/com.install.appinstall.xl\n"
-            "RU source: github.com/CaliostRa/InstallProtectionR"
+            "RU source: github.com/CaliostRa/InstallProtection_RU"
         ),
     }
     for name, value in values.items():
@@ -462,7 +462,7 @@ def build(project_root: Path, variant: str, java_command: str) -> Path:
     decoded = work / "decoded"
     output_dir = build_root / "outputs" / "apk" / variant
     output = output_dir / (
-        "InstallProtectionR-{}-{}-unsigned.apk".format(
+        "InstallProtection_RU-{}-{}-unsigned.apk".format(
             UPSTREAM_VERSION_NAME, variant
         )
     )
