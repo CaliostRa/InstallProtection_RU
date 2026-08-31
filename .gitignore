@@ -1,0 +1,9 @@
+/.gradle/
+/build/
+/APP/installCheck/.gradle/
+/APP/installCheck/app/build/
+*.apk
+*.apks
+*.pyc
+__pycache__/
+local.properties
