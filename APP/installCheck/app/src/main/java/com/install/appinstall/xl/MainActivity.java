@@ -27,12 +27,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.util.DisplayMetrics;
 import android.view.ViewTreeObserver;
-
-import com.install.appinstall.xl.util.Update;   // 导入更新工具类
-
 import java.util.ArrayList;
 import java.util.List;
 import android.content.pm.PackageInfo;
+
+// 导入更新工具类
+import com.install.appinstall.xl.util.Update;
+// 导入提示文件
 import com.install.appinstall.xl.util.ToastUtil;
 
 public class MainActivity extends Activity {
@@ -41,43 +42,51 @@ public class MainActivity extends Activity {
         // 核心拦截
         {
             "🔒 核心拦截功能",
-            "✅ 基础拦截 - 挡住约92%应用查询安装状态",
+            "✅ 基础拦截 - 挡住约82%应用查询安装状态",
             "✅ 文件保护 - 不让应用读取系统安装列表",
             "✅ 反射防御 - 监控隐藏的应用检测方法",
-            "✅ 网络伪装 - 拦截在线应用检测请求",
-            "✅ 数据伪造 - 生成虚假的应用信息"
+            "✅ 网络拦截 - 拦截在线应用检测请求",
+            "✅ 数据防护 - 生成虚假的应用信息"
         },
         // 包管理
         {
             "📦 应用包管理",
             "📦 安装查询 - 假装应用已安装/未安装",
-            "📦 应用列表 - 伪造已安装应用列表",
-            "📦 系统包过滤 - 不干扰系统应用\n避免系统出错请勿作用系统应用"
+            "📦 应用列表 - 拦截已安装应用列表",
+            "📦 权限列表 - 假装授权 应用权限",
+            "📦 S E Linux - 伪装系统强制模式",
+            "📦 假装分享 - 可假装已分享成功",
+            "📦 网络代理 - 隐藏网络代理模式",
+            "📦 屏幕防护 - 消除禁止留存界面",
+            "📦 系统包过滤 - 不干扰系统应用\n避免错误勿作用系统应用"
         },
         // 退出控制
         {
             "🛑 退出拦截功能",
-            "🛑 退出拦截 - 阻止应用直接退出常用方式",
-            "🛑 间接拦截 - 监控各种主流页面退出方式",
+            "🛑 普通拦截 - 阻止应用直接退出常用方式",
+            "🛑 闪退拦截 - 全局捕获异常阻止崩溃闪退",
+            "🛑 超强拦截 - 监控各种主流页面退出方式",
             "🛑 按钮拦截 - 挡住少部分点击退出结束按钮",
             "🛑 弹窗拦截 - 标准弹窗可以移除不可取消状态"
         },
         // 文件系统
         {
-            "📁 数据伪造功能",
-            "📁 目录伪装 - 假装存在应用目录",
-            "📁 文件检测 - 伪造应用文件存在",
-            "📁 命令行拦截 - 拦截伪造检测命令",
-            "📁 明细伪装 - 虚假生成安装时间/来源"
+            "📁 数据保护功能",
+            "📁 目录保护 - 假装存在应用目录",
+            "📁 文件检测 - 假装应用文件存在",
+            "📁 命令拦截 - 拦截目录检测命令",
+            "📁 痕迹隐藏 - 拦截应用注入检测",
+            "📁 明细数据 - 虚假生成安装时间/来源"
         },
         // 启动相关
         {
             "🚀 启动相关功能",
-            "🚀 状态伪装 - 假装应用已启用(伪造包)",
-            "🚀 启动拦截 - 控制应用间跳转(伪造包)",
-            "🚀 意图伪装 - 伪造应用启动能力(伪造包)",
-            "🚀 组件伪造 - 假装应用可被调用(伪造包)",
-            "🚀 插件拦截 - 挡住安装检测插件(伪造包)"
+            "🚀 应用状态 - 假装应用已启用(捕获包)",
+            "🚀 启动拦截 - 控制应用间跳转(捕获包)",
+            "🚀 意图查询 - 假装应用启动能力(捕获包)",
+            "🚀 组件查询 - 假装应用可被调用(捕获包)",
+            "🚀 插件拦截 - 挡住安装检测插件(捕获包)",
+            "🚀 返回功能 - 替换返回键,阻断禁止返回"
         },
         // 悬浮窗
         {
@@ -102,14 +111,14 @@ public class MainActivity extends Activity {
             "💬 关于模块",
             "💡 开发思路 - 永恒之蓝(小淋)",
             "📱 使用方法 - 支持LSPosed、LSPatch",
-            "⚠️ 拦截效果 - 能挡住大部分安装检测(约92%)",
+            "⚠️ 拦截效果 - 能挡住大部分安装检测(约82%)",
             "🚫 开发声明 - 仅限学习测试，禁止商用及付费！"
         }
     };
 
     private LinearLayout rootLayout;
     private ScrollView scrollView;
-    private TextView statusView;          // 左侧状态卡片的文本
+    private TextView statusView;
     private Handler handler = new Handler();
     private List<View> sectionViews = new ArrayList<View>();
     private boolean isScrolling = false;
@@ -157,7 +166,7 @@ public class MainActivity extends Activity {
                 }
             }, 300);
 
-        // 自动检查 GitHub 新版本（可选，若不需要可删除此行）
+        // 自动检查 GitHub 新版本
         Update.checkForUpdate(this);
     }
 
@@ -414,7 +423,7 @@ public class MainActivity extends Activity {
             || state == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
     }
 
-    /** 控制桌面图标显示/隐藏（使用 DONT_KILL_APP 防止应用退出） */
+    /** 控制桌面图标显示/隐藏 */
     private void setLauncherIconVisibility(boolean show) {
         PackageManager pm = getPackageManager();
         ComponentName aliasName = new ComponentName(this, "com.install.appinstall.xl.MainHome");
@@ -467,7 +476,7 @@ public class MainActivity extends Activity {
             .show();
     }
 
-    /** 尝试刷新桌面图标（兼容所有 Android 版本，无复杂 Extra） */
+    /** 尝试刷新桌面图标 */
     private void tryRefreshLauncher() {
         try {
             // 方法1：发送包变化广播
@@ -492,7 +501,7 @@ public class MainActivity extends Activity {
             // 组件已禁用，但桌面图标可能未消失
             new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
                 .setTitle("提示")
-                .setMessage("图标已隐藏，但桌面可能未及时刷新，您可以：\n1• 返回桌面等待几秒\n2• 重启桌面\n3• 重启手机\n\n使用LSPosed重新进入主页")
+                .setMessage("图标已隐藏，但桌面可能未及时刷新，您可以：\n1• 关闭LSPosed强制显示图标\n2• 返回桌面等待几秒\n3• 重启桌面\n4• 重启设备\n")
                 .setPositiveButton("知道了", null)
                 .show();
             // ToastUtil.show(this, "若未生效请重启设备");
@@ -502,8 +511,6 @@ public class MainActivity extends Activity {
 
         }
     }
-
-    // ==================== 原有功能模块方法 ====================
 
     /** 添加功能模块板块 */
     private void addModuleSection(final int sectionIndex) {
@@ -693,13 +700,13 @@ public class MainActivity extends Activity {
         if (title.contains("核心拦截")) {
             message.append("这是模块的核心功能，负责拦截各种安装检测手段，确保应用无法发现真实安装状态。");
         } else if (title.contains("包管理")) {
-            message.append("管理应用包信息，伪造安装状态和包列表，让检测工具看到你希望它们看到的内容。");
+            message.append("管理应用包信息，假装安装状态和包列表，让检测工具看到你希望它们看到的内容。");
         } else if (title.contains("退出拦截")) {
-            message.append("防止应用检测到伪造信息后直接退出，保持应用正常运行的同时提供用户选择。");
-        } else if (title.contains("数据伪造")) {
-            message.append("伪造文件系统、命令行输出等底层信息，应对更深入的检测手段。");
+            message.append("防止应用检测到虚假信息后直接退出，保持应用正常运行的同时提供用户选择。");
+        } else if (title.contains("数据防护")) {
+            message.append("拦截文件系统、命令行输出等底层信息，应对更深入的检测手段。");
         } else if (title.contains("启动相关")) {
-            message.append("控制应用间的启动和跳转，伪造应用的启动能力和组件状态。");
+            message.append("控制应用间的启动和跳转，假装应用的启动能力和组件状态。");
         } else if (title.contains("悬浮窗")) {
             message.append("应用宿主内可视化控制和状态显示，方便用户实时查看和切换模块状态。");
         } else if (title.contains("配置持久化")) {
@@ -873,7 +880,7 @@ public class MainActivity extends Activity {
         if (title.contains("核心拦截")) return ACTIVATED_COLOR;
         if (title.contains("包管理")) return 0xFF2196F3;
         if (title.contains("退出拦截")) return DEACTIVATED_COLOR;
-        if (title.contains("数据伪造")) return 0xFF2196F3;
+        if (title.contains("数据防护")) return 0xFF2196F3;
         if (title.contains("启动相关")) return 0xFF9C27B0;
         if (title.contains("悬浮窗")) return 0xFFFF9800;
         if (title.contains("配置持久化")) return 0xFF009688;
@@ -893,10 +900,10 @@ public class MainActivity extends Activity {
         bottomContainer.setPadding(dp2px(20), dp2px(16), dp2px(20), dp2px(16));
 
         // 版本信息（从 PackageManager 动态获取）
-        String versionText = "伪造安装模块版本: 获取失败";
+        String versionText = "安装防护模块版本: 获取失败";
         try {
             PackageInfo pkgInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            versionText = "伪造安装模块版本: " + pkgInfo.versionName + " (" + pkgInfo.versionCode + ")";
+            versionText = "安装防护模块版本: " + pkgInfo.versionName + " (" + pkgInfo.versionCode + ")";
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

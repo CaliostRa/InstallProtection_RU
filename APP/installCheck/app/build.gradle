@@ -8,8 +8,8 @@ android {
         applicationId "com.install.appinstall.xl"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 158
-        versionName "2.0.88"
+        versionCode 241
+        versionName "2.1.68"
     }
 
     buildTypes {
@@ -22,5 +22,5 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-	compileOnly fileTree(dir: 'libs/compile_only', include: ['*.jar'])
-	}
+    compileOnly fileTree(dir: 'libs/compile_only', include: ['*.jar'])
+}

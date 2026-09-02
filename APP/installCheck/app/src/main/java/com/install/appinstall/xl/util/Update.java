@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -39,8 +40,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * 更新检查工具类（最终版 + 版本信息头部含更新时间 + 发布页置底）
- * 添加手动检查防频繁点击（10秒限制）和自动检测频率限制（10分钟）
+ * 更新检查工具类（混合版：旧版稳定对话框 + 新版增强特性）
  */
 public class Update {
 
@@ -51,71 +51,54 @@ public class Update {
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
-    // ========== 新增：频率限制常量 ==========
-    private static final long MANUAL_INTERVAL = 10000; // 手动点击间隔 10 秒
-    private static final long AUTO_INTERVAL = 600000; // 自动检查间隔10分钟
-    private static long lastManualCheck = 0; // 上次手动检查时间（内存）
-    private static final String PREF_LAST_AUTO_CHECK = "last_auto_check_time"; // SharedPreferences 键
+    // ========== 频率限制常量 ==========
+    private static final long MANUAL_INTERVAL = 10000; // 10秒
+    private static final long AUTO_INTERVAL = 600000;  // 10分钟
+    private static long lastManualCheck = 0;
+    private static final String PREF_LAST_AUTO_CHECK = "last_auto_check_time";
 
-    /**
-     * 手动检查更新（按钮点击调用）
-     */
+    // ========== 公共检查方法 ==========
     public static void checkForUpdate(Activity activity) {
         if (activity == null || activity.isFinishing()) return;
-
         long now = System.currentTimeMillis();
         if (now - lastManualCheck < MANUAL_INTERVAL) {
-            ToastUtil.show(activity, "操作太频繁，请稍后再试");
+            ToastUtil.showUnique(activity, "操作太频繁，请稍后再试");
+            ReaLog.log("update", "操作太频繁，请稍后再试");
             return;
         }
         lastManualCheck = now;
-
         performUpdateCheck(activity);
     }
 
-    /**
-     * 自动检查更新（如 onCreate 中调用），带持久化频率限制
-     */
     public static void checkForUpdateAuto(Activity activity) {
         if (activity == null || activity.isFinishing()) return;
-
         SharedPreferences prefs = activity.getSharedPreferences("update_prefs", Context.MODE_PRIVATE);
         long lastAuto = prefs.getLong(PREF_LAST_AUTO_CHECK, 0);
         long now = System.currentTimeMillis();
-        if (now - lastAuto < AUTO_INTERVAL) {
-            return; // 未超过间隔，不执行检查
-        }
+        if (now - lastAuto < AUTO_INTERVAL) return;
         prefs.edit().putLong(PREF_LAST_AUTO_CHECK, now).apply();
-
         performUpdateCheck(activity);
     }
 
-    /**
-     * 实际的更新检查逻辑（从原 checkForUpdate 抽取）
-     */
     private static void performUpdateCheck(Activity activity) {
         if (activity == null || activity.isFinishing()) return;
-
         try {
             boolean isEmbedded = !MODULE_PACKAGE.equals(activity.getPackageName()) && isMainActivityExists(activity);
             if (isEmbedded) {
                 doUpdateCheck(activity);
                 return;
             }
-
             boolean isInModuleMain = MODULE_MAIN_ACTIVITY.equals(activity.getClass().getName());
             if (!isInModuleMain) {
                 showInTargetAppDialog(activity);
                 return;
             }
-
             doUpdateCheck(activity);
         } catch (Throwable t) {
-            ToastUtil.show(activity, "检查更新异常: " + t.getMessage());
+            ToastUtil.showUnique(activity, "检查更新异常: " + t.getMessage());
+            ReaLog.log("update", "检查更新异常: " + t.getMessage());
         }
     }
-
-    // ========== 以下为原 checkForUpdate 中的辅助方法，无变化 ==========
 
     private static boolean isMainActivityExists(Activity activity) {
         try {
@@ -129,14 +112,13 @@ public class Update {
         }
     }
 
-    // 执行网络检查（原 checkForUpdate 的主体部分）
     private static void doUpdateCheck(Activity activity) {
         if (!isNetworkAvailable(activity)) {
-            ToastUtil.show(activity, "网络未连接，请检查后重试");
+            ToastUtil.showUnique(activity, "网络未连接，请检查后重试");
             return;
         }
-
-        ToastUtil.show(activity, "正在检查更新...");
+        ToastUtil.showUnique(activity, "正在检查更新...");
+        ReaLog.log("update", "正在检查更新...");
 
         final WeakReference<Activity> weakRef = new WeakReference<>(activity);
         EXECUTOR.execute(new Runnable() {
@@ -144,7 +126,6 @@ public class Update {
                 public void run() {
                     final Activity act = weakRef.get();
                     if (act == null || act.isFinishing()) return;
-
                     try {
                         final int currentVersionCode;
                         try {
@@ -152,6 +133,7 @@ public class Update {
                                 .getPackageInfo(act.getPackageName(), 0).versionCode;
                         } catch (PackageManager.NameNotFoundException e) {
                             showToast(weakRef, "获取模块版本失败");
+                            ReaLog.log("update", "获取模块版本失败");
                             return;
                         }
 
@@ -160,9 +142,9 @@ public class Update {
                                 public void onSuccess(final ReleaseInfo release) {
                                     Activity a = weakRef.get();
                                     if (a == null || a.isFinishing()) return;
-
                                     int remoteVersion = extractFirstNumber(release.tagName);
                                     if (remoteVersion > currentVersionCode) {
+                                        ReaLog.log("update", "发现新版本: " + release.tagName);
                                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -173,6 +155,7 @@ public class Update {
                                                 }
                                             });
                                     } else {
+                                        ReaLog.log("update", "当前已是最新版本");
                                         showToast(weakRef, "当前已是最新版本");
                                     }
                                 }
@@ -181,18 +164,20 @@ public class Update {
                                 public void onRateLimitExceeded(long resetTimeMillis) {
                                     String timeStr = new SimpleDateFormat("HH:mm:ss", Locale.getDefault())
                                         .format(new Date(resetTimeMillis));
+                                    ReaLog.log("update", "API访问超限，重置时间: " + timeStr);
                                     showToast(weakRef, "API 访问超限\n请在 " + timeStr + " 后重试");
                                 }
 
                                 @Override
                                 public void onFailure(String errorMsg) {
+                                    ReaLog.log("update", "检查更新失败: " + errorMsg);
                                     showToast(weakRef, "检查更新失败: " + errorMsg);
                                 }
                             });
-
                     } catch (Exception e) {
                         e.printStackTrace();
                         showToast(weakRef, "检查更新异常: " + e.getMessage());
+                        ReaLog.log("update", "检查更新异常: " + e.getMessage());
                     }
                 }
             });
@@ -204,13 +189,13 @@ public class Update {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    ToastUtil.show(a, msg);
+                    ToastUtil.showUnique(a, msg);
                 }
             });
     }
 
     // ----------------------------------------------------------------------
-    // 数据获取（增加 updated_at）
+    // 数据获取（含 updated_at）
     // ----------------------------------------------------------------------
 
     private interface ReleaseCallback {
@@ -220,13 +205,7 @@ public class Update {
     }
 
     private static class ReleaseInfo {
-        String tagName;
-        String name;
-        String body;
-        String releaseUrl;
-        String downloadUrl;
-        String updatedAt; // 新增更新时间字段
-
+        String tagName, name, body, releaseUrl, downloadUrl, updatedAt;
         ReleaseInfo(String tagName, String name, String body, String releaseUrl, String downloadUrl, String updatedAt) {
             this.tagName = tagName;
             this.name = name;
@@ -248,7 +227,6 @@ public class Update {
             connection.setRequestProperty("Accept", "application/vnd.github.v3+json");
 
             int responseCode = connection.getResponseCode();
-
             if (responseCode == 403) {
                 String limitRemaining = connection.getHeaderField("X-RateLimit-Remaining");
                 if ("0".equals(limitRemaining)) {
@@ -258,6 +236,7 @@ public class Update {
                         callback.onRateLimitExceeded(resetEpoch);
                     } else {
                         callback.onFailure("API已达上限，请稍后再试");
+                        ReaLog.log("update", "API已达上限，请稍后再试");
                     }
                     return;
                 }
@@ -271,18 +250,15 @@ public class Update {
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuilder response = new StringBuilder();
             String line;
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
-            }
+            while ((line = reader.readLine()) != null) response.append(line);
             reader.close();
 
             JSONObject rel = new JSONObject(response.toString());
-
             String tagName = rel.optString("tag_name", "");
             String name = rel.optString("name", "");
             String body = rel.optString("body", "");
             String releaseUrl = rel.optString("html_url", "");
-            String updatedAt = rel.optString("updated_at", ""); // 获取更新时间
+            String updatedAt = rel.optString("updated_at", "");
 
             String downloadUrl = releaseUrl;
             if (rel.has("assets")) {
@@ -294,13 +270,12 @@ public class Update {
                     }
                 }
             }
-
             ReleaseInfo info = new ReleaseInfo(tagName, name, body, releaseUrl, downloadUrl, updatedAt);
             callback.onSuccess(info);
-
         } catch (Exception e) {
             e.printStackTrace();
             callback.onFailure("网络错误: " + e.getMessage());
+            ReaLog.log("update", "网络错误: " + e.getMessage());
         } finally {
             if (connection != null) connection.disconnect();
         }
@@ -310,11 +285,7 @@ public class Update {
         if (text == null) return 0;
         java.util.regex.Matcher matcher = java.util.regex.Pattern.compile("\\d+").matcher(text);
         if (matcher.find()) {
-            try {
-                return Integer.parseInt(matcher.group());
-            } catch (NumberFormatException e) {
-                return 0;
-            }
+            try { return Integer.parseInt(matcher.group()); } catch (NumberFormatException e) { return 0; }
         }
         return 0;
     }
@@ -331,73 +302,191 @@ public class Update {
     }
 
     // ----------------------------------------------------------------------
-    // Markdown 转 HTML（任意 [标记] 蓝色加粗）
+    // Markdown 转 HTML（增强版：带异常捕获，降级为纯文本）
     // ----------------------------------------------------------------------
 
     private static Spanned renderMarkdownAsHtml(String markdown) {
-        if (markdown == null) return fromHtml("");
-
-        String html = markdown;
-
-        // 处理任何方括号标记 [xxx] -> 蓝色加粗
-        html = html.replaceAll("(?i)\\[[^\\]]+\\]", "<b><font color='#2196F3'>$0</font></b>");
-
-        // 标题
-        html = html.replaceAll("(?m)^(#{1,6})\\s+(.+)$", "<h$1>$2</h$1>");
-
-        // 粗体
-        html = html.replaceAll("\\*\\*(.+?)\\*\\*", "<b>$1</b>");
-        html = html.replaceAll("__(.+?)__", "<b>$1</b>");
-
-        // 斜体
-        html = html.replaceAll("\\*(.+?)\\*", "<i>$1</i>");
-        html = html.replaceAll("_(.+?)_", "<i>$1</i>");
-
-        // 删除线
-        html = html.replaceAll("~~(.+?)~~", "<strike>$1</strike>");
-
-        // 行内代码
-        html = html.replaceAll("`(.+?)`", "<code>$1</code>");
-
-        // 无序列表
-        String[] lines = html.split("\n");
-        StringBuilder sb = new StringBuilder();
-        boolean inList = false;
-        for (String line : lines) {
-            String trimmed = line.trim();
-            if (trimmed.matches("^[-*+]\\s+.*")) {
-                if (!inList) {
-                    sb.append("<ul>");
-                    inList = true;
+        if (TextUtils.isEmpty(markdown)) return fromHtml("");
+        try {
+            String html = markdown;
+            // 方括号标记
+            html = html.replaceAll("(?i)\\[[^\\]]+\\]", "<b><font color='#2196F3'>$0</font></b>");
+            // 标题
+            html = html.replaceAll("(?m)^(#{1,6})\\s+(.+)$", "<h$1>$2</h$1>");
+            // 粗体
+            html = html.replaceAll("\\*\\*(.+?)\\*\\*", "<b>$1</b>");
+            html = html.replaceAll("__(.+?)__", "<b>$1</b>");
+            // 斜体
+            html = html.replaceAll("\\*(.+?)\\*", "<i>$1</i>");
+            html = html.replaceAll("_(.+?)_", "<i>$1</i>");
+            // 删除线
+            html = html.replaceAll("~~(.+?)~~", "<strike>$1</strike>");
+            // 行内代码
+            html = html.replaceAll("`(.+?)`", "<code>$1</code>");
+            // 列表
+            String[] lines = html.split("\n");
+            StringBuilder sb = new StringBuilder();
+            boolean inList = false;
+            for (String line : lines) {
+                String trimmed = line.trim();
+                if (trimmed.matches("^[-*+]\\s+.*")) {
+                    if (!inList) { sb.append("<ul>"); inList = true; }
+                    String item = trimmed.replaceFirst("^[-*+]\\s+", "");
+                    sb.append("<li>").append(item).append("</li>");
+                } else {
+                    if (inList) { sb.append("</ul>"); inList = false; }
+                    sb.append(line).append("\n");
                 }
-                String item = trimmed.replaceFirst("^[-*+]\\s+", "");
-                sb.append("<li>").append(item).append("</li>");
-            } else {
-                if (inList) {
-                    sb.append("</ul>");
-                    inList = false;
-                }
-                sb.append(line).append("\n");
             }
+            if (inList) sb.append("</ul>");
+            html = sb.toString();
+            // 引用
+            html = html.replaceAll("(?m)^>\\s*(.+)$", "<blockquote>$1</blockquote>");
+            // 换行
+            html = html.replaceAll("\n{2,}", "<br/><br/>");
+            html = html.replaceAll("\n", "<br/>");
+            return fromHtml(html);
+        } catch (Throwable t) {
+            // 降级：转义后显示纯文本
+            ReaLog.log("update", "更新渲染失败，降级为纯文本: " + t.getMessage());
+            return fromHtml(TextUtils.htmlEncode(markdown).replace("\n", "<br/>"));
         }
-        if (inList) {
-            sb.append("</ul>");
-        }
-        html = sb.toString();
-
-        // 引用
-        html = html.replaceAll("(?m)^>\\s*(.+)$", "<blockquote>$1</blockquote>");
-
-        // 换行
-        html = html.replaceAll("\n{2,}", "<br/><br/>");
-        html = html.replaceAll("\n", "<br/>");
-
-        return fromHtml(html);
     }
 
     // ----------------------------------------------------------------------
-    // 对话框展示（头部含更新时间 + 发布页置底）
+    // 对话框显示（使用系统标准 AlertDialog，保证稳定性）
     // ----------------------------------------------------------------------
+
+    private static void showDialog(final Activity activity,
+                                   final String title,
+                                   final Spanned message,
+                                   final String positiveText,
+                                   final DialogInterface.OnClickListener positiveListener,
+                                   final String negativeText,
+                                   final DialogInterface.OnClickListener negativeListener,
+                                   final String neutralText,
+                                   final DialogInterface.OnClickListener neutralListener) {
+        if (activity == null || activity.isFinishing()) return;
+
+        ScrollView scrollView = new ScrollView(activity);
+        scrollView.setLayoutParams(new ViewGroup.LayoutParams(
+                                       ViewGroup.LayoutParams.MATCH_PARENT,
+                                       ViewGroup.LayoutParams.WRAP_CONTENT));
+        scrollView.setFillViewport(true);
+
+        TextView textView = new TextView(activity);
+        textView.setText(message);
+        textView.setTextSize(13);
+        textView.setPadding(60, 20, 60, 20);  //左上右下
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        textView.setTextIsSelectable(true);
+        scrollView.addView(textView);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
+            .setTitle(title)
+            .setView(scrollView);
+
+        if (positiveText != null) builder.setPositiveButton(positiveText, positiveListener);
+        if (negativeText != null) builder.setNegativeButton(negativeText, negativeListener);
+        if (neutralText != null) builder.setNeutralButton(neutralText, neutralListener);
+
+        final AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCancelable(true);
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    try {
+                        Window window = dialog.getWindow();
+                        if (window != null) {
+                            WindowManager.LayoutParams params = window.getAttributes();
+                            params.width = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.95);
+                            params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                            params.gravity = Gravity.CENTER;
+                            window.setAttributes(params);
+                        }
+                    } catch (Exception ignored) {}
+                }
+            });
+
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            dialog.show();
+        } else {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.show();
+                    }
+                });
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // 具体对话框：更新提示 + 目标应用内提示
+    // ----------------------------------------------------------------------
+
+    private static void showUpdateDialog(final WeakReference<Activity> weakRef, final ReleaseInfo release) {
+        final Activity activity = weakRef.get();
+        if (activity == null || activity.isFinishing()) return;
+
+        // 安全获取字段
+        String tag = release.tagName != null ? release.tagName : "未知版本";
+        String name = release.name != null ? release.name : "无版本名称";
+        String updated = (release.updatedAt != null && release.updatedAt.length() >= 10)
+            ? release.updatedAt.substring(0, 10) : "未知时间";
+        String body = release.body != null ? release.body : "暂无更新内容";
+
+        String headerHtml = "<b>最新版本：</b>" + tag + "<br/>" +
+            "<b>版本名称：</b>" + name + "<br/>" +
+            "<b>更新时间：</b>" + updated + "<br/>" +
+            "<b>更新内容：</b><br/><br/>";
+
+        Spanned bodySpanned;
+        try {
+            bodySpanned = renderMarkdownAsHtml(body);
+        } catch (Throwable t) {
+            ReaLog.log("update", "渲染更新内容失败: " + t.getMessage());
+            bodySpanned = fromHtml(TextUtils.htmlEncode(body).replace("\n", "<br/>"));
+        }
+
+        String footerHtml = "<br/><b>发布页面：</b><br/><a href=\"" + release.releaseUrl + "\">" + release.releaseUrl + "</a>";
+        Spanned headerSpanned = fromHtml(headerHtml);
+        Spanned footerSpanned = fromHtml(footerHtml);
+        Spanned finalMessage = (Spanned) new android.text.SpannableStringBuilder(headerSpanned)
+            .append(bodySpanned)
+            .append(footerSpanned);
+
+        String positiveText = release.downloadUrl.equals(release.releaseUrl) ? "获取新版本" : "下载 APK";
+        DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (isSafeUrl(release.downloadUrl)) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(release.downloadUrl));
+                    activity.startActivity(intent);
+                    ToastUtil.showUnique(activity, "获取新版本");
+                    ReaLog.log("update", "获取新版本");
+                } else {
+                    ToastUtil.showUnique(activity, "获取链接失败，请手动访问发布页");
+                    ReaLog.log("update", "获取链接失败，请手动访问发布页");
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(release.releaseUrl));
+                    activity.startActivity(intent);
+                }
+            }
+        };
+
+        DialogInterface.OnClickListener negativeListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ToastUtil.showUnique(activity, "取消更新");
+            }
+        };
+
+        showDialog(activity, "检测到新版本", finalMessage,
+                   positiveText, positiveListener,
+                   "暂不更新", negativeListener,
+                   null, null);
+    }
 
     private static void showInTargetAppDialog(final Activity activity) {
         String htmlMessage = "<font color='#FF5722'><b>请在模块主页中检查更新</b></font><br><br>" +
@@ -426,129 +515,23 @@ public class Update {
             }
         };
 
-        showDialog(activity, "检测提示", message, "打开模块主页", positive, "打开链接", negative, "取消", null);
-    }
-
-    private static void showUpdateDialog(final WeakReference<Activity> weakRef, final ReleaseInfo release) {
-        final Activity activity = weakRef.get();
-        if (activity == null || activity.isFinishing()) return;
-
-        // 格式化更新时间（例如取日期部分）
-        String updatedDisplay = release.updatedAt;
-        if (updatedDisplay != null && updatedDisplay.length() >= 10) {
-            updatedDisplay = updatedDisplay.substring(0, 10); // 只取 yyyy-MM-dd
-        }
-
-        // 头部信息：tag、name、更新时间
-        String headerHtml = "<b>最新版本：</b>" + release.tagName + "<br/>" +
-            "<b>版本名称：</b>" + release.name + "<br/>" +
-            "<b>更新时间：</b>" + updatedDisplay + "<br/>" +
-            "<b>更新内容：</b><br/><br/>";
-
-        // 渲染更新内容
-        Spanned bodySpanned = renderMarkdownAsHtml(release.body);
-
-        // 底部发布页面链接
-        String footerHtml = "<br/><b>发布页面：</b><br/><a href=\"" + release.releaseUrl + "\">" + release.releaseUrl + "</a>";
-
-        // 合并头部、body、底部
-        Spanned headerSpanned = fromHtml(headerHtml);
-        Spanned footerSpanned = fromHtml(footerHtml);
-        Spanned finalMessage = (Spanned) new android.text.SpannableStringBuilder(headerSpanned)
-            .append(bodySpanned)
-            .append(footerSpanned);
-
-        String positiveText = release.downloadUrl.equals(release.releaseUrl) ? "获取新版本" : "下载 APK";
-        DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
+        // 取消按钮使用空实现，避免 null 导致意外
+        DialogInterface.OnClickListener neutral = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (isSafeUrl(release.downloadUrl)) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(release.downloadUrl));
-                    activity.startActivity(intent);
-                    ToastUtil.show(activity, "获取新版本");
-                } else {
-                    ToastUtil.show(activity, "获取链接失败，请手动访问发布页");
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(release.releaseUrl));
-                    activity.startActivity(intent);
-                }
+                dialog.dismiss();
             }
         };
 
-        DialogInterface.OnClickListener negativeListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ToastUtil.show(activity, "取消更新");
-            }
-        };
-
-        showDialog(activity, "检测到新版本", finalMessage,
-                   positiveText, positiveListener,
-                   "暂不更新", negativeListener,
-                   null, null);
+        showDialog(activity, "检测提示", message,
+                   "打开模块主页", positive,
+                   "打开链接", negative,
+                   "取消", neutral);
     }
 
-    private static void showDialog(final Activity activity,
-                                   final String title,
-                                   final Spanned message,
-                                   final String positiveText,
-                                   final DialogInterface.OnClickListener positiveListener,
-                                   final String negativeText,
-                                   final DialogInterface.OnClickListener negativeListener,
-                                   final String neutralText,
-                                   final DialogInterface.OnClickListener neutralListener) {
-        if (activity == null || activity.isFinishing()) return;
-
-        ScrollView scrollView = new ScrollView(activity);
-        scrollView.setLayoutParams(new ViewGroup.LayoutParams(
-                                       ViewGroup.LayoutParams.MATCH_PARENT,
-                                       ViewGroup.LayoutParams.WRAP_CONTENT));
-        scrollView.setFillViewport(true);
-
-        TextView textView = new TextView(activity);
-        textView.setText(message);
-        textView.setTextSize(14);
-        textView.setPadding(40, 20, 40, 20);
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
-        textView.setTextIsSelectable(true);
-        scrollView.addView(textView);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
-            .setTitle(title)
-            .setView(scrollView);
-
-        if (positiveText != null) builder.setPositiveButton(positiveText, positiveListener);
-        if (negativeText != null) builder.setNegativeButton(negativeText, negativeListener);
-        if (neutralText != null) builder.setNeutralButton(neutralText, neutralListener);
-
-        final AlertDialog dialog = builder.create();
-
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialogInterface) {
-                    try {
-                        Window window = dialog.getWindow();
-                        if (window != null) {
-                            WindowManager.LayoutParams params = window.getAttributes();
-                            params.width = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.9);
-                            params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-                            params.gravity = Gravity.CENTER;
-                            window.setAttributes(params);
-                        }
-                    } catch (Exception ignored) {}
-                }
-            });
-
-        if (Looper.myLooper() == Looper.getMainLooper()) {
-            dialog.show();
-        } else {
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        dialog.show();
-                    }
-                });
-        }
-    }
+    // ----------------------------------------------------------------------
+    // 工具方法
+    // ----------------------------------------------------------------------
 
     private static Spanned fromHtml(String html) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -574,11 +557,13 @@ public class Update {
                 activity.startActivity(launchIntent);
                 return true;
             } else {
-                ToastUtil.show(activity, "❌启动失败,请检查是否安装");
+                ToastUtil.showUnique(activity, "❌启动失败,请检查是否安装");
+                ReaLog.log("update", "获取模块启动失败");
                 return false;
             }
         } catch (Exception e) {
-            ToastUtil.show(activity, "❌启动失败,请检查是否安装");
+            ToastUtil.showUnique(activity, "❌启动失败,请检查是否安装");
+            ReaLog.log("update", "获取模块启动失败");
             return false;
         }
     }

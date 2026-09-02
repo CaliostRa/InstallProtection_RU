@@ -1,5 +1,6 @@
 package com.install.appinstall.xl.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,57 +12,91 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.graphics.drawable.GradientDrawable;
 import android.util.DisplayMetrics;
+import android.os.Build;
 
 public class ToastUtil {
 
-    /**
-     * 显示默认样式的 Toast（位置：居中偏下，偏移 0,400）
-     */
+    private static Toast sToast = null;
+
+    // ========== 增强版 Context 获取 ==========
+    private static Context getValidContext(Context context) {
+        if (context != null) return context;
+        // 1. 从 ReaLog 获取（内部持有 HookInit 引用）
+        if (ReaLog.sHookInit != null) {
+            Activity act = ReaLog.sHookInit.getCurrentActivity();
+            if (act != null && !act.isFinishing() && !act.isDestroyed()) {
+                return act;
+            }
+            Context appCtx = ReaLog.sHookInit.getApplicationContext();
+            if (appCtx != null) return appCtx;
+        }
+        // 2. 最终兜底：从 ActivityThread 获取 Application
+        try {
+            return (Context) Class.forName("android.app.ActivityThread")
+                .getMethod("currentApplication").invoke(null);
+        } catch (Throwable ignored) {}
+        return null;
+    }
+
+    // ========== 原有 show 方法（兼容，已增强） ==========
     public static void show(final Context context, final String message) {
         show(context, message, false, Gravity.CENTER, 0, 400);
     }
 
-    /**
-     * 显示 HTML 样式的 Toast（位置：居中偏下，偏移 0,400）
-     */
     public static void show(final Context context, final String message, final boolean isHtml) {
         show(context, message, isHtml, Gravity.CENTER, 0, 400);
     }
 
-    /**
-     * 完全自定义重力位置的 Toast（纯文本）
-     */
     public static void show(final Context context, final String message, final int gravity, final int xOffset, final int yOffset) {
         show(context, message, false, gravity, xOffset, yOffset);
     }
 
-    /**
-     * 完全自定义重力位置的 Toast（支持 HTML）
-     */
     public static void show(final Context context, final String message, final boolean isHtml,
                             final int gravity, final int xOffset, final int yOffset) {
-        if (context == null) return;
+        final Context validCtx = getValidContext(context);
+        if (validCtx == null) return;
 
-        // 确保在主线程显示
         if (Looper.myLooper() != Looper.getMainLooper()) {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        showInternal(context, message, isHtml, gravity, xOffset, yOffset);
+                        Toast t = showInternal(validCtx, message, isHtml, gravity, xOffset, yOffset);
+                        if (t != null) t.show();
                     }
                 });
         } else {
-            showInternal(context, message, isHtml, gravity, xOffset, yOffset);
+            Toast t = showInternal(validCtx, message, isHtml, gravity, xOffset, yOffset);
+            if (t != null) t.show();
         }
     }
 
-    private static void showInternal(Context context, String message, boolean isHtml,
-                                     int gravity, int xOffset, int yOffset) {
+    // ========== 增强版 showUnique（自动取消上一个） ==========
+    public static void showUnique(final Context context, final String message) {
+        showUnique(context, message, false);
+    }
+
+    public static void showUnique(final Context context, final String message, final boolean isHtml) {
+        Context validCtx = getValidContext(context);
+        if (validCtx == null) return;
+
+        if (sToast != null) {
+            try { sToast.cancel(); } catch (Throwable ignored) {}
+            sToast = null;
+        }
+        Toast t = showInternal(validCtx, message, isHtml, Gravity.CENTER, 0, 400);
+        if (t != null) {
+            t.show();
+            sToast = t;
+        }
+    }
+
+    // ========== 内部构造方法（不变） ==========
+    private static Toast showInternal(Context context, String message, boolean isHtml,
+                                      int gravity, int xOffset, int yOffset) {
         try {
-            // 创建自定义 TextView
             TextView tv = new TextView(context);
             if (isHtml) {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     tv.setText(Html.fromHtml(message, Html.FROM_HTML_MODE_LEGACY));
                 } else {
                     tv.setText(Html.fromHtml(message));
@@ -70,7 +105,6 @@ public class ToastUtil {
                 tv.setText(message);
             }
 
-            // 统一样式
             tv.setGravity(Gravity.CENTER);
             tv.setPadding(40, 30, 40, 30);
             tv.setTextSize(16);
@@ -81,90 +115,64 @@ public class ToastUtil {
             drawable.setCornerRadius(radius);
             tv.setBackground(drawable);
 
-            // 获取屏幕宽度并设置最大宽度为屏幕的80%，防止过长文本超出屏幕
             DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
             int screenWidth = displayMetrics.widthPixels;
             tv.setMaxWidth((int)(screenWidth * 0.8));
-
-            // 必须设置 LayoutParams 才能正确测量
             tv.setLayoutParams(new ViewGroup.LayoutParams(
                                    ViewGroup.LayoutParams.WRAP_CONTENT,
                                    ViewGroup.LayoutParams.WRAP_CONTENT));
 
-            // 提前测量 TextView 尺寸
             int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
             int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
             tv.measure(widthMeasureSpec, heightMeasureSpec);
             int toastWidth = tv.getMeasuredWidth();
             int toastHeight = tv.getMeasuredHeight();
 
-            // 获取屏幕尺寸（重新获取，以防前面修改了）
             int screenHeight = displayMetrics.heightPixels;
 
-            // 钳位偏移量，确保 Toast 完整可见
             int safeXOffset = clampOffset(gravity, xOffset, toastWidth, screenWidth, false);
             int safeYOffset = clampOffset(gravity, yOffset, toastHeight, screenHeight, true);
 
-            // 创建 Toast 并设置
             Toast toast = new Toast(context);
             toast.setView(tv);
             toast.setDuration(Toast.LENGTH_SHORT);
             toast.setGravity(gravity, safeXOffset, safeYOffset);
-            toast.show();
-
+            return toast;
         } catch (Throwable e) {
-            // 兜底：系统默认 Toast
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+            return Toast.makeText(context, message, Toast.LENGTH_SHORT);
         }
     }
 
-    /**
-     * 根据重力方向和视图尺寸，将偏移量钳位到安全范围内
-     *
-     * @param gravity     重力标志（如 Gravity.CENTER）
-     * @param offset      用户传入的偏移量（px）
-     * @param viewSize    视图尺寸（宽或高，px）
-     * @param screenSize  屏幕尺寸（宽或高，px）
-     * @param isVertical  true 表示处理垂直方向，false 表示水平方向
-     * @return 钳位后的安全偏移量
-     */
+    // ========== 钳位偏移量（不变） ==========
     private static int clampOffset(int gravity, int offset, int viewSize, int screenSize, boolean isVertical) {
         int mask = isVertical ? Gravity.VERTICAL_GRAVITY_MASK : Gravity.HORIZONTAL_GRAVITY_MASK;
         int gravityComponent = gravity & mask;
 
         if (isVertical) {
             if (gravityComponent == Gravity.TOP) {
-                // offset 表示视图顶部距离屏幕顶部的距离
                 return Math.max(0, Math.min(offset, screenSize - viewSize));
             } else if (gravityComponent == Gravity.BOTTOM) {
-                // offset 表示视图底部距离屏幕底部的距离
                 return Math.max(0, Math.min(offset, screenSize - viewSize));
             } else if (gravityComponent == Gravity.CENTER_VERTICAL) {
-                // offset 表示相对于垂直中心的偏移，正值向下，负值向上
                 int maxOffset = (screenSize - viewSize) / 2;
                 return Math.max(-maxOffset, Math.min(offset, maxOffset));
             } else {
-                // 未指定垂直重力，默认当作 TOP 处理（系统行为）
                 return Math.max(0, Math.min(offset, screenSize - viewSize));
             }
         } else {
             if (gravityComponent == Gravity.LEFT) {
-                // offset 表示视图左边距离屏幕左边的距离
                 return Math.max(0, Math.min(offset, screenSize - viewSize));
             } else if (gravityComponent == Gravity.RIGHT) {
-                // offset 表示视图右边距离屏幕右边的距离
                 return Math.max(0, Math.min(offset, screenSize - viewSize));
             } else if (gravityComponent == Gravity.CENTER_HORIZONTAL) {
                 int maxOffset = (screenSize - viewSize) / 2;
                 return Math.max(-maxOffset, Math.min(offset, maxOffset));
             } else {
-                // 未指定水平重力，默认当作 LEFT 处理
                 return Math.max(0, Math.min(offset, screenSize - viewSize));
             }
         }
     }
 
-    // dp 转 px
     private static float dpToPx(Context context, float dp) {
         return dp * context.getResources().getDisplayMetrics().density;
     }
@@ -179,7 +187,7 @@ public class ToastUtil {
 A0      160    63%
 AA      170    67%
 B3      179    70%
-CC     204    80%
+CC     204     80%
 E6     230     90%
 FF     255     100%
 如何自定义透明度
