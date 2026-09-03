@@ -1,1 +1,4 @@
-rootProject.name = "InstallProtection_RU"
+rootProject.name = 'InstallProtection_RU'
+
+include ':app'
+project(':app').projectDir = file('APP/installCheck/app')

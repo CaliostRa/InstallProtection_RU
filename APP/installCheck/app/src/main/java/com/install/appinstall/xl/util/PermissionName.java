@@ -1135,8 +1135,6 @@ public class PermissionName {
                 return "管理所有应用通知策略";
             case "android.permission.PEERS_MAC_ADDRESS":
                 return "读取对等设备MAC地址";
-            case "android.permission.REQUEST_DELETE_PACKAGES":
-                return "请求删除应用包";
             case "android.permission.SUSPEND_PACKAGES":
                 return "挂起其他应用";
             case "android.permission.START_ACTIVITIES_FROM_BACKGROUND":
@@ -1181,8 +1179,6 @@ public class PermissionName {
                 return "启动测试Instrumentation";
             case "android.permission.MANAGE_USERS":
                 return "管理多用户";
-            case "android.permission.SET_DEBUG_APP":
-                return "设置调试应用";
 
             default:
                 int lastDot = perm.lastIndexOf('.');

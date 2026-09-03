@@ -7,3 +7,7 @@
 *.pyc
 __pycache__/
 local.properties
+*.jks
+*.keystore
+*.p12
+*.pfx

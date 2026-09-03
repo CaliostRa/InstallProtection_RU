@@ -1,37 +1,21 @@
-plugins {
-    id 'base'
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.0.2'
+    }
 }
 
-def javaExecutable = System.getenv('JAVA_HOME')
-        ? new File(System.getenv('JAVA_HOME'), 'bin/java').absolutePath
-        : 'java'
-
-tasks.register('localizationTest', Exec) {
-    group = 'verification'
-    description = 'Runs localization and compatibility invariant tests.'
-    commandLine 'python3', '-m', 'unittest', 'discover', '-s', 'tools/tests', '-v'
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
 }
 
-tasks.named('check') {
-    dependsOn tasks.named('localizationTest')
-}
-
-tasks.register('assembleDebug', Exec) {
-    group = 'build'
-    description = 'Builds the unsigned Russian debug APK.'
-    dependsOn tasks.named('check')
-    commandLine 'python3', 'tools/build_localized_apk.py',
-            '--variant', 'debug', '--java', javaExecutable
-}
-
-tasks.register('assembleRelease', Exec) {
-    group = 'build'
-    description = 'Builds the unsigned Russian release APK.'
-    dependsOn tasks.named('check')
-    commandLine 'python3', 'tools/build_localized_apk.py',
-            '--variant', 'release', '--java', javaExecutable
-}
-
-tasks.named('assemble') {
-    dependsOn tasks.named('assembleDebug'), tasks.named('assembleRelease')
+tasks.register('clean', Delete) {
+    delete rootProject.buildDir
 }
