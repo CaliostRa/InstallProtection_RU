@@ -214,15 +214,15 @@ public class MainActivity extends Activity {
         titleContainer.setBackground(titleBg);
         titleContainer.setPadding(dp2px(20), dp2px(24), dp2px(20), dp2px(24));
 
-        TextView titleView = new TextView(this);
-        titleView.setText("应用安装防护模块 2.0");
+        TextView titleView = new com.install.appinstall.xl.ru.RuTextView(this);
+        titleView.setText(getString(R.string.app_name));
         titleView.setTextSize(24);
         titleView.setTextColor(DIALOG_TITLE_COLOR);
         titleView.setGravity(Gravity.CENTER);
         titleView.setTypeface(null, android.graphics.Typeface.BOLD);
 
-        TextView subtitleView = new TextView(this);
-        subtitleView.setText("(永恒之蓝 / 小淋)");
+        TextView subtitleView = new com.install.appinstall.xl.ru.RuTextView(this);
+        subtitleView.setText(getString(R.string.module_subtitle));
         subtitleView.setTextSize(16);
         subtitleView.setTextColor(DIALOG_TEXT_COLOR);
         subtitleView.setGravity(Gravity.CENTER);
@@ -290,14 +290,14 @@ public class MainActivity extends Activity {
         statusContainer.setBackground(statusBg);
         statusContainer.setPadding(dp2px(20), dp2px(20), dp2px(20), dp2px(20));
 
-        TextView statusIcon = new TextView(this);
+        TextView statusIcon = new com.install.appinstall.xl.ru.RuTextView(this);
         statusIcon.setText(isActivated ? "✅" : "❌");
         statusIcon.setTextSize(32);
         statusIcon.setGravity(Gravity.CENTER);
         statusContainer.addView(statusIcon);
 
         //配置激活文本内容
-        statusView = new TextView(this);
+        statusView = new com.install.appinstall.xl.ru.RuTextView(this);
         statusView.setText(isActivated ? "模块已激活" : "模块未激活");
         statusView.setTextSize(18);
         statusView.setTextColor(isActivated ? ACTIVATED_COLOR : DEACTIVATED_COLOR);
@@ -363,13 +363,13 @@ public class MainActivity extends Activity {
         controlContainer.setBackground(controlBg);
         controlContainer.setPadding(dp2px(20), dp2px(20), dp2px(20), dp2px(20));
 
-        final TextView iconView = new TextView(this);
+        final TextView iconView = new com.install.appinstall.xl.ru.RuTextView(this);
         iconView.setText(iconVisible ? "👁️" : "👁️‍🗨️");
         iconView.setTextSize(32);
         iconView.setGravity(Gravity.CENTER);
         controlContainer.addView(iconView);
 
-        final TextView textView = new TextView(this);
+        final TextView textView = new com.install.appinstall.xl.ru.RuTextView(this);
         textView.setText(iconVisible ? "桌面图标:显示中" : "桌面图标:隐藏中");
         textView.setTextSize(18);
         textView.setTextColor(iconVisible ? ACTIVATED_COLOR : DEACTIVATED_COLOR);
@@ -437,7 +437,7 @@ public class MainActivity extends Activity {
         final String[] options = {"显示桌面图标", "隐藏桌面图标-需重启设备/刷新桌面\n隐藏后使用LSPosed可进入本主页"};
         final int checkedItem = isIconVisible() ? 0 : 1;
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+        AlertDialog.Builder builder = new com.install.appinstall.xl.ru.RuDialogBuilder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
         builder.setTitle("桌面图标显示控制")
             .setSingleChoiceItems(options, checkedItem, new DialogInterface.OnClickListener() {
                 @Override
@@ -499,7 +499,7 @@ public class MainActivity extends Activity {
         boolean isHidden = !isIconVisible(); // 组件已禁用
         if (isHidden) {
             // 组件已禁用，但桌面图标可能未消失
-            new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
+            new com.install.appinstall.xl.ru.RuDialogBuilder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
                 .setTitle("提示")
                 .setMessage("图标已隐藏，但桌面可能未及时刷新，您可以：\n1• 关闭LSPosed强制显示图标\n2• 返回桌面等待几秒\n3• 重启桌面\n4• 重启设备\n")
                 .setPositiveButton("知道了", null)
@@ -530,7 +530,7 @@ public class MainActivity extends Activity {
         int containerPadding = dp2px(16);
         sectionContainer.setPadding(containerPadding, containerPadding, containerPadding, containerPadding);
 
-        TextView sectionTitle = new TextView(this);
+        TextView sectionTitle = new com.install.appinstall.xl.ru.RuTextView(this);
         sectionTitle.setText(section[0]);
         sectionTitle.setTextSize(18);
         sectionTitle.setTextColor(getSectionColor(section[0]));
@@ -607,7 +607,7 @@ public class MainActivity extends Activity {
 
     /** 创建功能项 */
     private TextView createFeatureItem(String text) {
-        TextView itemView = new TextView(this);
+        TextView itemView = new com.install.appinstall.xl.ru.RuTextView(this);
         itemView.setText(text);
         itemView.setTextSize(14);
         itemView.setTextColor(DIALOG_TEXT_COLOR);
@@ -659,7 +659,7 @@ public class MainActivity extends Activity {
             "(若使用LSPatch内嵌/本地模式无需激活)\n" +
             "4. 返回此处检查状态";
 
-        final AlertDialog dialog = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
+        final AlertDialog dialog = new com.install.appinstall.xl.ru.RuDialogBuilder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
             .setTitle("模块状态详情")
             .setMessage(message)
             .setPositiveButton("确定", null)
@@ -715,7 +715,7 @@ public class MainActivity extends Activity {
             message.append("模块基本信息和使用说明，请严格遵守使用规范。\n严禁引流盈利以及所有商业等行为。");
         }
 
-        final AlertDialog dialog = new AlertDialog.Builder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
+        final AlertDialog dialog = new com.install.appinstall.xl.ru.RuDialogBuilder(this, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
             .setTitle(title)
             .setMessage(message.toString())
             .setPositiveButton("确定", null)
@@ -913,21 +913,23 @@ public class MainActivity extends Activity {
 
         // 将版本和版权放在一行
         LinearLayout versionCopyrightRow = new LinearLayout(this);
-        versionCopyrightRow.setOrientation(LinearLayout.HORIZONTAL);
-        versionCopyrightRow.setGravity(Gravity.CENTER_VERTICAL);
+        versionCopyrightRow.setOrientation(LinearLayout.VERTICAL);
+        versionCopyrightRow.setGravity(Gravity.CENTER);
 
-        TextView versionView = new TextView(this);
+        TextView versionView = new com.install.appinstall.xl.ru.RuTextView(this);
         versionView.setText(versionText);
         versionView.setTextSize(12);
         versionView.setTextColor(DIALOG_TEXT_COLOR);
         versionView.setGravity(Gravity.START);
-        versionView.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+        versionView.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
 
-        TextView copyrightView = new TextView(this);
+        TextView copyrightView = new com.install.appinstall.xl.ru.RuTextView(this);
         copyrightView.setText(copyrightText);
         copyrightView.setTextSize(12);
         copyrightView.setTextColor(0xFF888888);
-        copyrightView.setGravity(Gravity.END);
+        copyrightView.setGravity(Gravity.CENTER);
         copyrightView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
         versionCopyrightRow.addView(versionView);
@@ -936,13 +938,13 @@ public class MainActivity extends Activity {
 
         // 链接行（三个链接水平排列，间距缩小）
         LinearLayout linkLayout = new LinearLayout(this);
-        linkLayout.setOrientation(LinearLayout.HORIZONTAL);
+        linkLayout.setOrientation(LinearLayout.VERTICAL);
         linkLayout.setGravity(Gravity.CENTER);
         int linkMargin = dp2px(10); // 缩小间距
 
         // 作者主页(GitHub)
-        TextView homeView = new TextView(this);
-        homeView.setText("🔗 作者主页(GitHub)");
+        TextView homeView = new com.install.appinstall.xl.ru.RuTextView(this);
+        homeView.setText(getString(R.string.bottom_link_author));
         homeView.setTextSize(12);
         homeView.setTextColor(LINK_COLOR);
         homeView.setGravity(Gravity.CENTER);
@@ -957,8 +959,8 @@ public class MainActivity extends Activity {
             });
 
         // 作者主页(MT论坛)
-        TextView mtView = new TextView(this);
-        mtView.setText("🔗 作者主页(MT论坛)");
+        TextView mtView = new com.install.appinstall.xl.ru.RuTextView(this);
+        mtView.setText(getString(R.string.bottom_link_forum));
         mtView.setTextSize(12);
         mtView.setTextColor(LINK_COLOR);
         mtView.setGravity(Gravity.CENTER);
@@ -973,8 +975,8 @@ public class MainActivity extends Activity {
             });
 
         // 官方仓库(GitHub)
-        TextView repoView = new TextView(this);
-        repoView.setText("📦 官方仓库(GitHub)");
+        TextView repoView = new com.install.appinstall.xl.ru.RuTextView(this);
+        repoView.setText(getString(R.string.bottom_link_repo));
         repoView.setTextSize(12);
         repoView.setTextColor(LINK_COLOR);
         repoView.setGravity(Gravity.CENTER);
@@ -982,7 +984,7 @@ public class MainActivity extends Activity {
         repoView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Xposed-Modules-Repo/com.install.appinstall.xl"));
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/CaliostRa/InstallProtection_RU"));
                     startActivity(intent);
                     ToastUtil.show(MainActivity.this, "前往模块仓库");
                 }
@@ -995,8 +997,8 @@ public class MainActivity extends Activity {
         bottomContainer.addView(linkLayout);
 
         // 检查更新按钮
-        TextView checkUpdateBtn = new TextView(this);
-        checkUpdateBtn.setText("🔍 检查更新");
+        TextView checkUpdateBtn = new com.install.appinstall.xl.ru.RuTextView(this);
+        checkUpdateBtn.setText(getString(R.string.update_check_action));
         checkUpdateBtn.setTextSize(14);
         checkUpdateBtn.setTextColor(LINK_COLOR);
         checkUpdateBtn.setGravity(Gravity.CENTER);
@@ -1009,9 +1011,17 @@ public class MainActivity extends Activity {
             });
         bottomContainer.addView(checkUpdateBtn);
 
+        TextView forkNoteView = new com.install.appinstall.xl.ru.RuTextView(this);
+        forkNoteView.setText(getString(R.string.about_fork_note));
+        forkNoteView.setTextSize(11);
+        forkNoteView.setTextColor(DIALOG_TEXT_COLOR);
+        forkNoteView.setGravity(Gravity.CENTER);
+        forkNoteView.setPadding(0, dp2px(8), 0, 0);
+        bottomContainer.addView(forkNoteView);
+
         // 免责声明
-        TextView disclaimerView = new TextView(this);
-        disclaimerView.setText("仅供个人学习测试，禁商用禁引流以及禁付费盈利");
+        TextView disclaimerView = new com.install.appinstall.xl.ru.RuTextView(this);
+        disclaimerView.setText(getString(R.string.bottom_disclaimer));
         disclaimerView.setTextSize(11);
         disclaimerView.setTextColor(0xFFAAAAAA);
         disclaimerView.setGravity(Gravity.CENTER);

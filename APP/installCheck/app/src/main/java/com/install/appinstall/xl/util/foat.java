@@ -730,7 +730,7 @@ public class foat {
     // ========== 创建悬浮窗View ==========
     private TextView createFloatingView(final Activity activity) {
         try {
-            final TextView floatingView = new TextView(activity);
+            final TextView floatingView = new com.install.appinstall.xl.ru.RuTextView(activity);
             floatingView.setTag("install_fake_floating");
             String targetApp = hookInit.getCurrentTargetApp();
             Boolean currentStatus = HookInit.installStatusMap.get(targetApp);
