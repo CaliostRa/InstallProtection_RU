@@ -30,6 +30,13 @@ class SourceLocalizationTest(unittest.TestCase):
         self.assertIn('com.install.appinstall.xl.HookInit$HookProvider', manifest)
         self.assertEqual("com.install.appinstall.xl.HookInit", xposed_init)
 
+    def test_release_tag_is_tied_to_version_code(self):
+        workflow = (ROOT / ".github/workflows/android-build.yml").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('"v${version_code}-"*', workflow)
+        self.assertIn("Tag must start with v<versionCode>-", workflow)
+
     def test_source_catalog_matches_generated_java(self):
         subprocess.run(
             ["python3", "tools/generate_ru_catalog.py", "--check"],
