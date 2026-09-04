@@ -270,7 +270,7 @@ public class ReaLog {
                 ll = new LinearLayout(context);
                 ll.setOrientation(LinearLayout.VERTICAL);
                 ll.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                TextView textView = new TextView(context);
+                TextView textView = new com.install.appinstall.xl.ru.RuTextView(context);
                 textView.setTextSize(12);
                 textView.setTextColor(0xFF333333);
                 textView.setLineSpacing(4, 1);
@@ -294,9 +294,9 @@ public class ReaLog {
             final LogItem item = data.get(position);
             Spanned spanned;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                spanned = Html.fromHtml(item.toHtml(position + 1), Html.FROM_HTML_MODE_LEGACY);
+                spanned = com.install.appinstall.xl.ru.RuStrings.fromHtml(item.toHtml(position + 1), Html.FROM_HTML_MODE_LEGACY);
             } else {
-                spanned = Html.fromHtml(item.toHtml(position + 1));
+                spanned = com.install.appinstall.xl.ru.RuStrings.fromHtml(item.toHtml(position + 1));
             }
             tv.setText(spanned);
 
@@ -304,7 +304,8 @@ public class ReaLog {
                     @Override
                     public boolean onLongClick(View v) {
                         try {
-                            String plain = item.toPlainText(position + 1);
+                            String plain = com.install.appinstall.xl.ru.RuStrings.translateString(
+                                    item.toPlainText(position + 1));
                             ClipboardManager cb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
                             if (cb == null) {
                                 ToastUtil.showUnique(context, "❌ 复制失败：系统服务不可用");
@@ -674,7 +675,7 @@ public class ReaLog {
     }
 
     private static void addCategoryButton(final Activity act, String displayName, final String key, boolean hasRealLog) {
-        TextView tv = new TextView(act);
+        TextView tv = new com.install.appinstall.xl.ru.RuTextView(act);
         String text = hasRealLog ? displayName : displayName + "(空)";
         tv.setText(text);
         tv.setTextSize(13);
@@ -1009,7 +1010,7 @@ public class ReaLog {
             topLayout.setGravity(Gravity.CENTER_VERTICAL);
             topLayout.setPadding(30, 10, 20, 10);
 
-            TextView titleMain = new TextView(activity);
+            TextView titleMain = new com.install.appinstall.xl.ru.RuTextView(activity);
             titleMain.setText(" 实时日志 - 安装防护模块");
             titleMain.setTextSize(18);
             titleMain.setTextColor(0xFF333333);
@@ -1018,7 +1019,7 @@ public class ReaLog {
             topLayout.addView(titleMain);
             sTitleMainText = titleMain;
 
-            TextView titleStatus = new TextView(activity);
+            TextView titleStatus = new com.install.appinstall.xl.ru.RuTextView(activity);
             titleStatus.setText("● 记录中");
             titleStatus.setTextSize(14);
             titleStatus.setTextColor(0xFF4CAF50);
@@ -1028,7 +1029,7 @@ public class ReaLog {
             rootLayout.addView(topLayout);
 
             // ---- 第二行 ----
-            TextView subtitle = new TextView(activity);
+            TextView subtitle = new com.install.appinstall.xl.ru.RuTextView(activity);
             subtitle.setText("分类：全部  |  模式：展开  |  共 0 条，总检测 0 次");
             subtitle.setTextSize(13);
             subtitle.setTextColor(0xFF666666);
@@ -1047,25 +1048,25 @@ public class ReaLog {
             buttonBar.setOrientation(LinearLayout.HORIZONTAL);
             buttonBar.setGravity(Gravity.CENTER_VERTICAL);
 
-            final Button modeBtn = new Button(activity);
+            final Button modeBtn = new com.install.appinstall.xl.ru.RuButton(activity);
             modeBtn.setText(sMergedMode ? "数据合并" : "数据展开");
             setButtonStyle(modeBtn, sMergedMode ? 0xFF4CAF50 : 0xFF2196F3, Color.WHITE);
 
-            Button topBtn = new Button(activity);
+            Button topBtn = new com.install.appinstall.xl.ru.RuButton(activity);
             topBtn.setText("顶部");
             setButtonStyle(topBtn, 0xFF607D8B, Color.WHITE);
 
-            Button bottomBtn = new Button(activity);
+            Button bottomBtn = new com.install.appinstall.xl.ru.RuButton(activity);
             bottomBtn.setText("底部");
             setButtonStyle(bottomBtn, 0xFF607D8B, Color.WHITE);
 
-            final Button pauseBtn = new Button(activity);
+            final Button pauseBtn = new com.install.appinstall.xl.ru.RuButton(activity);
             pauseBtn.setText("记录中(全部)");
             setButtonStyle(pauseBtn, 0xFF4CAF50, Color.WHITE);
             sPauseBtn = pauseBtn;
             updatePauseButton();
 
-            final Button clearBtn = new Button(activity);
+            final Button clearBtn = new com.install.appinstall.xl.ru.RuButton(activity);
             clearBtn.setText("清理(全部)");
             setButtonStyle(clearBtn, 0xFFF44336, Color.WHITE);
             sClearBtn = clearBtn;
@@ -1142,7 +1143,7 @@ public class ReaLog {
             bottomLayout.setOrientation(LinearLayout.HORIZONTAL);
             bottomLayout.setGravity(Gravity.CENTER_VERTICAL);
             bottomLayout.setPadding(80, 40, 30, 12);
-            TextView bottomTip = new TextView(activity);
+            TextView bottomTip = new com.install.appinstall.xl.ru.RuTextView(activity);
             bottomTip.setText("缓存上限: " + MAX_CACHE_SIZE + " 条，超出自动清理");
             bottomTip.setTextColor(0xFF66BB6A); // 浅绿色 (RGB: 144, 238, 144)
             bottomTip.setTypeface(Typeface.DEFAULT_BOLD); // 加粗
@@ -1152,7 +1153,7 @@ public class ReaLog {
             bottomLayout.addView(bottomTip);
             sBottomTipText = bottomTip;
 
-            Button closeBtn = new Button(activity);
+            Button closeBtn = new com.install.appinstall.xl.ru.RuButton(activity);
             closeBtn.setText("返回应用");
             setButtonStyle(closeBtn, 0xFF2196F3, Color.WHITE);
             closeBtn.setPadding(30, 12, 30, 12);
@@ -1175,7 +1176,7 @@ public class ReaLog {
             rootLayout.addView(bottomLayout);
 
             // ---- 构建 Dialog（不使用自定义主题，纯代码控制） ----
-            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            AlertDialog.Builder builder = new com.install.appinstall.xl.ru.RuDialogBuilder(activity);
             builder.setView(rootLayout);
             final AlertDialog dialog = builder.create();
             dialogRef[0] = dialog;
