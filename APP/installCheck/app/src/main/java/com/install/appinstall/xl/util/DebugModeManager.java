@@ -391,7 +391,7 @@ public class DebugModeManager {
         rootLayout.setPadding(60, 30, 60, 30);
         rootLayout.setBackgroundColor(0xFFFFFFFF);
 
-        TextView title = new TextView(activity);
+        TextView title = new com.install.appinstall.xl.ru.RuTextView(activity);
         title.setText("[管理员] 安装防护模块-调试模式");
         title.setTextSize(18);
         title.setTextColor(0xFF333333);
@@ -399,7 +399,7 @@ public class DebugModeManager {
         title.setPadding(20, 10, 20, 10);
         rootLayout.addView(title);
 
-        TextView hint = new TextView(activity);
+        TextView hint = new com.install.appinstall.xl.ru.RuTextView(activity);
         hint.setText("⚠️ 修改后需重启应用才能生效，调试完毕请尽快恢复默认。\n⚠️ 未勾选即表示完全禁止该功能运行，相关配置设置将完全失效！");
         hint.setTextSize(12);
         hint.setTextColor(0xFFFF0000);
@@ -425,7 +425,7 @@ public class DebugModeManager {
             categoryHeader.setGravity(Gravity.CENTER_VERTICAL);
             categoryHeader.setPadding(0, 20, 0, 10);
 
-            final CheckBox catCheckBox = new CheckBox(activity);
+            final CheckBox catCheckBox = new com.install.appinstall.xl.ru.RuCheckBox(activity);
             catCheckBox.setText(category);
             catCheckBox.setTextSize(16);
             catCheckBox.setTextColor(0xFF2196F3);
@@ -437,7 +437,7 @@ public class DebugModeManager {
             List<String> keys = getFeaturesForCategory(category);
             final List<CheckBox> childCheckBoxes = new ArrayList<>();
             for (String key : keys) {
-                CheckBox cb = new CheckBox(activity);
+                CheckBox cb = new com.install.appinstall.xl.ru.RuCheckBox(activity);
                 String display = FEATURE_DISPLAY_NAMES.get(key);
                 boolean checked = currentState.get(key);
 
@@ -509,7 +509,7 @@ public class DebugModeManager {
         int marginPx = (int) (marginDp * density);
         btnParams.setMargins(marginPx, 0, marginPx, 0);
 
-        Button saveBtn = new Button(activity);
+        Button saveBtn = new com.install.appinstall.xl.ru.RuButton(activity);
         saveBtn.setText("保存设置");
         saveBtn.setPadding(30, 15, 30, 15);
         saveBtn.setTextColor(0xFFFFFFFF);
@@ -517,7 +517,7 @@ public class DebugModeManager {
         saveBtn.setLayoutParams(btnParams);
         buttonBar.addView(saveBtn);
 
-        Button resetBtn = new Button(activity);
+        Button resetBtn = new com.install.appinstall.xl.ru.RuButton(activity);
         resetBtn.setText("恢复默认");
         resetBtn.setPadding(30, 15, 30, 15);
         resetBtn.setTextColor(0xFFFFFFFF);
@@ -525,7 +525,7 @@ public class DebugModeManager {
         resetBtn.setLayoutParams(btnParams);
         buttonBar.addView(resetBtn);
 
-        Button closeBtn = new Button(activity);
+        Button closeBtn = new com.install.appinstall.xl.ru.RuButton(activity);
         closeBtn.setText("返回应用");
         closeBtn.setPadding(30, 15, 30, 15);
         closeBtn.setTextColor(0xFFFFFFFF);
@@ -535,7 +535,7 @@ public class DebugModeManager {
 
         rootLayout.addView(buttonBar);
 
-        final AlertDialog dialog = new AlertDialog.Builder(activity)
+        final AlertDialog dialog = new com.install.appinstall.xl.ru.RuDialogBuilder(activity)
             .setView(rootLayout)
             .create();
         dialog.setCanceledOnTouchOutside(true);
@@ -646,9 +646,9 @@ public class DebugModeManager {
             text = "<b><font color='#F44336'>" + displayName + " <small>(已禁用)</small></font></b>";
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            cb.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY));
+            cb.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(text, Html.FROM_HTML_MODE_LEGACY));
         } else {
-            cb.setText(Html.fromHtml(text));
+            cb.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(text));
         }
     }
 

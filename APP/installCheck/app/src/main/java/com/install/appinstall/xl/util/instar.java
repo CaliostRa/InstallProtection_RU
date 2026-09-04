@@ -97,7 +97,7 @@ public class instar {
         topRow.setGravity(Gravity.CENTER_VERTICAL);
         topRow.setPadding(0, 0, 10, 20);
 
-        TextView label = new TextView(activity);
+        TextView label = new com.install.appinstall.xl.ru.RuTextView(activity);
         label.setText("捕内\n获容");
         label.setTextSize(14);
         label.setTextColor(0xFF000000);
@@ -106,7 +106,8 @@ public class instar {
 
         final EditText inputEt = new EditText(activity);
         inputEt.setText(identifier);
-        inputEt.setHint("支持 * 通配符，! 排除");
+        inputEt.setHint(com.install.appinstall.xl.ru.RuStrings.translateString(
+                "支持 * 通配符，! 排除"));
         inputEt.setPadding(20, 15, 20, 15);
         inputEt.setTextSize(14);
         inputEt.setTextColor(0xFFFF5722);
@@ -126,7 +127,7 @@ public class instar {
         topRow.addView(inputEt, etParams);
 
         // ---- 规则按钮（更小） ----
-        Button ruleBtn = new Button(activity);
+        Button ruleBtn = new com.install.appinstall.xl.ru.RuButton(activity);
         ruleBtn.setText("帮助");
         ruleBtn.setTextSize(14);
         ruleBtn.setPadding(20, 15, 20, 15);
@@ -160,11 +161,11 @@ public class instar {
         String message = "<font color='#9E9E9E'><b>黑名单：</b>始终阻止并拦截启动<br><b>白名单：</b>始终允许并真实启动<br><br>" +
             "<b>智能判断规则：</b><br>• 相同内容你选择了“虚假/真实/取消”按钮3次，将自动处理选择<br>• 若3次内选择不一致将重置计数，每次将会弹出询问启动确认</font>";
 
-        TextView msgView = new TextView(activity);
+        TextView msgView = new com.install.appinstall.xl.ru.RuTextView(activity);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            msgView.setText(Html.fromHtml(message, Html.FROM_HTML_MODE_LEGACY));
+            msgView.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(message, Html.FROM_HTML_MODE_LEGACY));
         } else {
-            msgView.setText(Html.fromHtml(message));
+            msgView.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(message));
         }
         msgView.setTextIsSelectable(true);
         msgView.setTextSize(14);
@@ -221,7 +222,8 @@ public class instar {
                             }
                         }
                     );
-                    ruleDialog.setTitle("正则匹配符 使用说明");
+                    ruleDialog.setTitle(com.install.appinstall.xl.ru.RuStrings.translateString(
+                            "正则匹配符 使用说明"));
                     ruleDialog.show();
                 }
             });
@@ -317,14 +319,14 @@ public class instar {
             titleRow.setOrientation(LinearLayout.HORIZONTAL);
             titleRow.setGravity(Gravity.CENTER_VERTICAL);
             titleRow.setPadding(0, 10, 0, 10);
-            TextView title = new TextView(activity);
+            TextView title = new com.install.appinstall.xl.ru.RuTextView(activity);
             title.setText("📋 黑/白名单列表(“排除”包不纳入)");
             title.setTextSize(16);
             title.setTextColor(0xFF4CAF50);
             title.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
             titleRow.addView(title);
 
-            Button batchBtn = new Button(activity);
+            Button batchBtn = new com.install.appinstall.xl.ru.RuButton(activity);
             batchBtn.setText("批量设置");
             batchBtn.setTextSize(12);
             batchBtn.setPadding(20, 5, 20, 5);
@@ -337,7 +339,7 @@ public class instar {
                 });
             titleRow.addView(batchBtn);
 
-            Button deleteAllBtn = new Button(activity);
+            Button deleteAllBtn = new com.install.appinstall.xl.ru.RuButton(activity);
             deleteAllBtn.setText("全部删除");
             deleteAllBtn.setTextSize(12);
             deleteAllBtn.setPadding(20, 5, 20, 5);
@@ -438,7 +440,7 @@ public class instar {
                 LinearLayout itemLayout = new LinearLayout(activity);
                 itemLayout.setOrientation(LinearLayout.HORIZONTAL);
                 itemLayout.setPadding(0, 8, 0, 8);
-                TextView idTv = new TextView(activity);
+                TextView idTv = new com.install.appinstall.xl.ru.RuTextView(activity);
                 idTv.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
                 idTv.setText(displayName);
                 idTv.setTextSize(14);
@@ -447,14 +449,14 @@ public class instar {
                 idTv.setEllipsize(TextUtils.TruncateAt.END);
                 idTv.setMaxLines(5);
                 itemLayout.addView(idTv);
-                TextView typeTv = new TextView(activity);
+                TextView typeTv = new com.install.appinstall.xl.ru.RuTextView(activity);
                 typeTv.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 typeTv.setText(typeDesc);
                 typeTv.setTextSize(14);
                 typeTv.setTextColor(0xFF333333);
                 typeTv.setPadding(10, 0, 0, 0);
                 itemLayout.addView(typeTv);
-                Button configBtn = new Button(activity);
+                Button configBtn = new com.install.appinstall.xl.ru.RuButton(activity);
                 configBtn.setText("设置");
                 configBtn.setTextSize(12);
                 configBtn.setPadding(20, 5, 20, 5);
@@ -477,7 +479,7 @@ public class instar {
                         }
                     });
                 itemLayout.addView(configBtn);
-                Button deleteBtn = new Button(activity);
+                Button deleteBtn = new com.install.appinstall.xl.ru.RuButton(activity);
                 deleteBtn.setText("删除");
                 deleteBtn.setTextSize(12);
                 deleteBtn.setPadding(20, 5, 20, 5);
@@ -512,14 +514,14 @@ public class instar {
             titleRow.setOrientation(LinearLayout.HORIZONTAL);
             titleRow.setGravity(Gravity.CENTER_VERTICAL);
             titleRow.setPadding(0, 10, 0, 10);
-            TextView title = new TextView(activity);
+            TextView title = new com.install.appinstall.xl.ru.RuTextView(activity);
             title.setText("📊 智能判断(超过3次相同,自动处理)");
             title.setTextSize(16);
             title.setTextColor(0xFF2196F3);
             title.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
             titleRow.addView(title);
 
-            Button deleteAllRecordBtn = new Button(activity);
+            Button deleteAllRecordBtn = new com.install.appinstall.xl.ru.RuButton(activity);
             deleteAllRecordBtn.setText("全部删除");
             deleteAllRecordBtn.setTextSize(12);
             deleteAllRecordBtn.setPadding(20, 5, 20, 5);
@@ -592,7 +594,7 @@ public class instar {
                 LinearLayout itemLayout = new LinearLayout(activity);
                 itemLayout.setOrientation(LinearLayout.HORIZONTAL);
                 itemLayout.setPadding(0, 8, 0, 8);
-                TextView idTv = new TextView(activity);
+                TextView idTv = new com.install.appinstall.xl.ru.RuTextView(activity);
                 idTv.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
                 idTv.setText(display);
                 idTv.setTextSize(14);
@@ -601,14 +603,14 @@ public class instar {
                 idTv.setEllipsize(TextUtils.TruncateAt.END);
                 idTv.setMaxLines(5);
                 itemLayout.addView(idTv);
-                TextView historyTv = new TextView(activity);
+                TextView historyTv = new com.install.appinstall.xl.ru.RuTextView(activity);
                 historyTv.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 historyTv.setText(desc.toString());
                 historyTv.setTextSize(14);
                 historyTv.setTextColor(0xFF333333);
                 historyTv.setPadding(10, 0, 0, 0);
                 itemLayout.addView(historyTv);
-                Button deleteBtn = new Button(activity);
+                Button deleteBtn = new com.install.appinstall.xl.ru.RuButton(activity);
                 deleteBtn.setText("删除记录");
                 deleteBtn.setTextSize(12);
                 deleteBtn.setPadding(20, 5, 20, 5);
@@ -666,13 +668,13 @@ public class instar {
         titleRow.setOrientation(LinearLayout.HORIZONTAL);
         titleRow.setGravity(Gravity.CENTER_VERTICAL);
         titleRow.setPadding(0, 0, 0, 20);
-        TextView hint = new TextView(activity);
+        TextView hint = new com.install.appinstall.xl.ru.RuTextView(activity);
         hint.setText("请勾选要批量修改的参数：");
         hint.setTextSize(14);
         hint.setTextColor(0xFF333333);
         hint.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         titleRow.addView(hint);
-        final Button toggleSelectBtn = new Button(activity);
+        final Button toggleSelectBtn = new com.install.appinstall.xl.ru.RuButton(activity);
         toggleSelectBtn.setText("全选");
         toggleSelectBtn.setTextSize(12);
         toggleSelectBtn.setPadding(20, 8, 20, 8);
@@ -733,7 +735,7 @@ public class instar {
             item.setPadding(0, 8, 0, 8);
             item.setFocusable(true);
             item.setClickable(true);
-            final CheckBox checkBox = new CheckBox(activity);
+            final CheckBox checkBox = new com.install.appinstall.xl.ru.RuCheckBox(activity);
             checkBox.setTag(i);
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
@@ -744,7 +746,7 @@ public class instar {
                     }
                 });
             item.addView(checkBox);
-            TextView textView = new TextView(activity);
+            TextView textView = new com.install.appinstall.xl.ru.RuTextView(activity);
             textView.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
             textView.setText(display + "  (" + typeDesc + ")");
             textView.setTextSize(14);
@@ -793,17 +795,17 @@ public class instar {
         buttonRow.setOrientation(LinearLayout.HORIZONTAL);
         buttonRow.setGravity(Gravity.CENTER);
         buttonRow.setPadding(0, 20, 0, 0);
-        Button blackBtn = new Button(activity);
+        Button blackBtn = new com.install.appinstall.xl.ru.RuButton(activity);
         blackBtn.setText("设为黑名单");
         blackBtn.setTextSize(12);
         blackBtn.setPadding(20, 10, 20, 10);
         setRoundButtonBackground(blackBtn, 0xAAF44336);
-        Button whiteBtn = new Button(activity);
+        Button whiteBtn = new com.install.appinstall.xl.ru.RuButton(activity);
         whiteBtn.setText("设为白名单");
         whiteBtn.setTextSize(12);
         whiteBtn.setPadding(20, 10, 20, 10);
         setRoundButtonBackground(whiteBtn, 0xAA4CAF50);
-        Button cancelBtn = new Button(activity);
+        Button cancelBtn = new com.install.appinstall.xl.ru.RuButton(activity);
         cancelBtn.setText("取消");
         cancelBtn.setTextSize(12);
         cancelBtn.setPadding(20, 10, 20, 10);

@@ -94,12 +94,12 @@ public class ToastUtil {
     private static Toast showInternal(Context context, String message, boolean isHtml,
                                       int gravity, int xOffset, int yOffset) {
         try {
-            TextView tv = new TextView(context);
+            TextView tv = new com.install.appinstall.xl.ru.RuTextView(context);
             if (isHtml) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    tv.setText(Html.fromHtml(message, Html.FROM_HTML_MODE_LEGACY));
+                    tv.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(message, Html.FROM_HTML_MODE_LEGACY));
                 } else {
-                    tv.setText(Html.fromHtml(message));
+                    tv.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(message));
                 }
             } else {
                 tv.setText(message);
@@ -139,7 +139,10 @@ public class ToastUtil {
             toast.setGravity(gravity, safeXOffset, safeYOffset);
             return toast;
         } catch (Throwable e) {
-            return Toast.makeText(context, message, Toast.LENGTH_SHORT);
+            return Toast.makeText(
+                    context,
+                    com.install.appinstall.xl.ru.RuStrings.translate(message),
+                    Toast.LENGTH_SHORT);
         }
     }
 

@@ -2899,7 +2899,8 @@ if (foatInstance != null) {
             topLayout.setOrientation(LinearLayout.HORIZONTAL);
             topLayout.setPadding(0, 0, 0, 20);
             final EditText inputEt = new EditText(activity);
-            inputEt.setHint("请输入包名\n(如com.a.b.c)");
+            inputEt.setHint(com.install.appinstall.xl.ru.RuStrings.translateString(
+                    "请输入包名\n(如com.a.b.c)"));
             inputEt.setPadding(30, 20, 30, 20);
             inputEt.setTextColor(0xFF000000);
             inputEt.setBackgroundColor(0xFFFFFFFF);
@@ -2944,8 +2945,8 @@ if (foatInstance != null) {
             typeSpinner.setWillNotDraw(false);
             typeSpinner.setPopupBackgroundResource(android.R.color.transparent);
             List<String> spinnerItems = new ArrayList<String>();
-            spinnerItems.add("◀ [伪造]包名");
-            spinnerItems.add("◀ [排除]包名");
+            spinnerItems.add(com.install.appinstall.xl.ru.RuStrings.translateString("◀ [伪造]包名"));
+            spinnerItems.add(com.install.appinstall.xl.ru.RuStrings.translateString("◀ [排除]包名"));
             ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(activity, android.R.layout.simple_spinner_item, spinnerItems) {
                 @Override
                 public View getView(int position, View convertView, ViewGroup parent) {
@@ -3013,7 +3014,7 @@ if (foatInstance != null) {
             spinnerParams.leftMargin = 10;
             spinnerParams.width = (int) (activity.getResources().getDisplayMetrics().density * 150);
             topLayout.addView(typeSpinner, spinnerParams);
-            Button addBtn = new Button(activity);
+            Button addBtn = new com.install.appinstall.xl.ru.RuButton(activity);
             addBtn.setText("确定");
             addBtn.setPadding(40, 20, 40, 20);
             addBtn.setTextColor(0xFFFFFFFF);
@@ -3069,7 +3070,7 @@ if (foatInstance != null) {
             packagesLayout.setPadding(10, 10, 10, 10);
             adaptiveScrollView.addView(packagesLayout);
             packagesLayoutArr[0] = packagesLayout;
-            TextView tipTv = new TextView(activity);
+            TextView tipTv = new com.install.appinstall.xl.ru.RuTextView(activity);
             tipTv.setText("请准确输入包名,否则数据设置失效\n批量输入:一行一个换行或中英文(逗号分号)");
             tipTv.setPadding(30, 20, 30, 10);
             tipTv.setTextSize(12);
@@ -3248,7 +3249,7 @@ if (foatInstance != null) {
                                                 },
                                         }
                                 );
-                                spaceDialog.setMessage(Html.fromHtml(
+                                spaceDialog.setMessage(com.install.appinstall.xl.ru.RuStrings.fromHtml(
                                         "包名包含空格可能导致数据失效，是否去除所有空格？<br><br>" +
                                                 "将添加 <font color='#FF5722'><b>" + pkgList.size() + "</b></font> 个包名。"
                                 ));
@@ -3511,7 +3512,7 @@ if (foatInstance != null) {
         }
 
         if (!fakePackages.isEmpty()) {
-            TextView fakeTitle = new TextView(activity);
+            TextView fakeTitle = new com.install.appinstall.xl.ru.RuTextView(activity);
             fakeTitle.setText("📌 伪造包名（" + fakePackages.size() + "个）");
             fakeTitle.setPadding(30, 15, 30, 10);
             fakeTitle.setTextSize(13);
@@ -3527,7 +3528,7 @@ if (foatInstance != null) {
                 itemLayout.setPadding(30, 8, 30, 8);
                 itemLayout.setGravity(Gravity.CENTER_VERTICAL);
 
-                TextView pkgTv = new TextView(activity);
+                TextView pkgTv = new com.install.appinstall.xl.ru.RuTextView(activity);
                 pkgTv.setText((i + 1) + ". [伪造] " + pkg);
                 pkgTv.setPadding(0, 5, 0, 5);
                 pkgTv.setTextSize(13);
@@ -3541,7 +3542,7 @@ if (foatInstance != null) {
                 LinearLayout.LayoutParams pkgParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
                 itemLayout.addView(pkgTv, pkgParams);
 
-                Button configBtn = new Button(activity);
+                Button configBtn = new com.install.appinstall.xl.ru.RuButton(activity);
                 configBtn.setText("配置");
                 configBtn.setTextSize(11);
                 configBtn.setPadding(20, 5, 20, 5);
@@ -3580,7 +3581,7 @@ if (foatInstance != null) {
                 });
                 itemLayout.addView(configBtn);
 
-                Button delBtn = new Button(activity);
+                Button delBtn = new com.install.appinstall.xl.ru.RuButton(activity);
                 delBtn.setText("删除");
                 delBtn.setTextSize(11);
                 delBtn.setPadding(20, 5, 20, 5);
@@ -3660,7 +3661,7 @@ if (foatInstance != null) {
         }
 
         if (!excludePackages.isEmpty()) {
-            TextView excludeTitle = new TextView(activity);
+            TextView excludeTitle = new com.install.appinstall.xl.ru.RuTextView(activity);
             excludeTitle.setText("❌ 排除包名（" + excludePackages.size() + "个）");
             excludeTitle.setPadding(30, 15, 30, 10);
             excludeTitle.setTextSize(13);
@@ -3676,7 +3677,7 @@ if (foatInstance != null) {
                 itemLayout.setPadding(30, 8, 30, 8);
                 itemLayout.setGravity(Gravity.CENTER_VERTICAL);
 
-                TextView pkgTv = new TextView(activity);
+                TextView pkgTv = new com.install.appinstall.xl.ru.RuTextView(activity);
                 pkgTv.setText((i + 1) + ". [排除] " + pkg);
                 pkgTv.setPadding(0, 5, 0, 5);
                 pkgTv.setTextSize(13);
@@ -3690,7 +3691,7 @@ if (foatInstance != null) {
                 LinearLayout.LayoutParams pkgParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
                 itemLayout.addView(pkgTv, pkgParams);
 
-                Button delBtn = new Button(activity);
+                Button delBtn = new com.install.appinstall.xl.ru.RuButton(activity);
                 delBtn.setText("删除");
                 delBtn.setTextSize(11);
                 delBtn.setPadding(20, 5, 20, 5);
@@ -3750,7 +3751,7 @@ if (foatInstance != null) {
         }
 
         if (fakePackages.isEmpty() && excludePackages.isEmpty()) {
-            TextView emptyTv = new TextView(activity);
+            TextView emptyTv = new com.install.appinstall.xl.ru.RuTextView(activity);
             emptyTv.setText("暂无已添加包名");
             emptyTv.setPadding(30, 15, 30, 15);
             emptyTv.setTextColor(0xFF9E9E9E);
@@ -3991,12 +3992,12 @@ if (foatInstance != null) {
                     int paddingSmall = (int) (5 * finalActivity.getResources().getDisplayMetrics().density);
                     itemLayout.setPadding(paddingPx, paddingSmall, paddingPx, paddingSmall);
 
-                    TextView titleView = new TextView(finalActivity);
+                    TextView titleView = new com.install.appinstall.xl.ru.RuTextView(finalActivity);
                     titleView.setId(android.R.id.text1);
                     titleView.setTextSize(16);
                     titleView.setTextColor(0xFF333333);
 
-                    TextView descView = new TextView(finalActivity);
+                    TextView descView = new com.install.appinstall.xl.ru.RuTextView(finalActivity);
                     descView.setId(android.R.id.text2);
                     descView.setTextSize(11);
                     descView.setTextColor(0xFF888888);
@@ -4021,11 +4022,11 @@ if (foatInstance != null) {
 
                 MenuItem item = getItem(position);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    titleView.setText(Html.fromHtml(item.title, Html.FROM_HTML_MODE_LEGACY));
-                    descView.setText(Html.fromHtml(item.desc, Html.FROM_HTML_MODE_LEGACY));
+                    titleView.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(item.title, Html.FROM_HTML_MODE_LEGACY));
+                    descView.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(item.desc, Html.FROM_HTML_MODE_LEGACY));
                 } else {
-                    titleView.setText(Html.fromHtml(item.title));
-                    descView.setText(Html.fromHtml(item.desc));
+                    titleView.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(item.title));
+                    descView.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(item.desc));
                 }
 
                 divider.setVisibility(position == menuItems.size() - 1 ? View.GONE : View.VISIBLE);
@@ -4046,7 +4047,7 @@ if (foatInstance != null) {
             }
         };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(finalActivity, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
+        AlertDialog.Builder builder = new com.install.appinstall.xl.ru.RuDialogBuilder(finalActivity, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT);
         builder.setTitle("更多配置设置");
         builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
             @Override
@@ -4136,14 +4137,14 @@ if (foatInstance != null) {
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setPadding(40, 30, 40, 30);
 
-        TextView tip = new TextView(activity);
+        TextView tip = new com.install.appinstall.xl.ru.RuTextView(activity);
         String tipHtml = "请选择要假装分享成功的平台：<br>" +
                 "<small><b>保存后<font color='#2196F3'>立即生效</font> 异常请禁用!</b></small><br>" +
                 "<font color='#FF5722'><small><b>注：仅限应用自身调用官方分享SDK才生效</b></small></font>";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            tip.setText(Html.fromHtml(tipHtml, Html.FROM_HTML_MODE_LEGACY));
+            tip.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(tipHtml, Html.FROM_HTML_MODE_LEGACY));
         } else {
-            tip.setText(Html.fromHtml(tipHtml));
+            tip.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(tipHtml));
         }
         tip.setTextColor(0xFF333333);
         tip.setTextSize(14);
@@ -4158,7 +4159,7 @@ if (foatInstance != null) {
             final String label = labels[i];
             boolean isCurrentlyDisabled = !workingMap.getOrDefault(key, false);
 
-            final CheckBox cb = new CheckBox(activity);
+            final CheckBox cb = new com.install.appinstall.xl.ru.RuCheckBox(activity);
             updateCheckBoxText(cb, label, !isCurrentlyDisabled);
             cb.setChecked(!isCurrentlyDisabled);
             cb.setPadding(20, 10, 20, 10);
@@ -4232,14 +4233,14 @@ if (foatInstance != null) {
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setPadding(40, 30, 40, 30);
 
-        TextView tip = new TextView(activity);
+        TextView tip = new com.install.appinstall.xl.ru.RuTextView(activity);
         String tipHtml = "请选择要启用的隐藏功能：<br>" +
                 "<small><b>保存后需<font color='#2196F3'>重启应用</font>才能完全生效！</b></small><br>" +
                 "<font color='#FF5722'><small><b>如有异常将自动禁用对应功能项</small></b></font>";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            tip.setText(Html.fromHtml(tipHtml, Html.FROM_HTML_MODE_LEGACY));
+            tip.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(tipHtml, Html.FROM_HTML_MODE_LEGACY));
         } else {
-            tip.setText(Html.fromHtml(tipHtml));
+            tip.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(tipHtml));
         }
         tip.setTextColor(0xFF333333);
         tip.setTextSize(14);
@@ -4257,7 +4258,7 @@ if (foatInstance != null) {
             final String label = labels[i];
             boolean isDisabled = !workingMap.getOrDefault(key, true);
 
-            final CheckBox cb = new CheckBox(activity);
+            final CheckBox cb = new com.install.appinstall.xl.ru.RuCheckBox(activity);
             updateCheckBoxText(cb, label, !isDisabled);
             cb.setChecked(!isDisabled);
             cb.setPadding(20, 10, 20, 10);
@@ -4355,14 +4356,14 @@ if (foatInstance != null) {
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setPadding(40, 30, 40, 30);
 
-        TextView tip = new TextView(activity);
+        TextView tip = new com.install.appinstall.xl.ru.RuTextView(activity);
         String tipHtml = "请选择要启用的功能：<br>" +
                 "<b><small>保存后<font color='#2196F3'>立即生效</font> SSL需重启应用。</small></b><br>" +
                 "<font color='#FF5722'><small><b>如有异常将自动禁用对应功能项</small></b></font>";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            tip.setText(Html.fromHtml(tipHtml, Html.FROM_HTML_MODE_LEGACY));
+            tip.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(tipHtml, Html.FROM_HTML_MODE_LEGACY));
         } else {
-            tip.setText(Html.fromHtml(tipHtml));
+            tip.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(tipHtml));
         }
         tip.setTextColor(0xFF333333);
         tip.setTextSize(14);
@@ -4381,7 +4382,7 @@ if (foatInstance != null) {
             final String label = labels[i];
             boolean isCurrentlyDisabled = !workingMap.getOrDefault(key, true);
 
-            final CheckBox cb = new CheckBox(activity);
+            final CheckBox cb = new com.install.appinstall.xl.ru.RuCheckBox(activity);
             updateCheckBoxText(cb, label, !isCurrentlyDisabled);
             cb.setChecked(!isCurrentlyDisabled);
             cb.setEnabled(true);
@@ -4524,14 +4525,14 @@ if (foatInstance != null) {
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setPadding(40, 30, 40, 30);
 
-        TextView tip = new TextView(activity);
+        TextView tip = new com.install.appinstall.xl.ru.RuTextView(activity);
         String tipHtml = "请选择要启用的拦截功能：<br>" +
                 "<small><b>保存后<font color='#2196F3'>立即生效</font> 异常请关闭！</small></b><br>" +
                 "<font color='#FF5722'><small><b>如有异常将自动禁用对应功能项</small></b></font>";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            tip.setText(Html.fromHtml(tipHtml, Html.FROM_HTML_MODE_LEGACY));
+            tip.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(tipHtml, Html.FROM_HTML_MODE_LEGACY));
         } else {
-            tip.setText(Html.fromHtml(tipHtml));
+            tip.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(tipHtml));
         }
         tip.setTextColor(0xFF333333);
         tip.setTextSize(14);
@@ -4552,7 +4553,7 @@ if (foatInstance != null) {
             final String label = labels[i];
             boolean isCurrentlyDisabled = !workingMap.getOrDefault(key, true);
 
-            final CheckBox cb = new CheckBox(activity);
+            final CheckBox cb = new com.install.appinstall.xl.ru.RuCheckBox(activity);
             if ("auto_enable".equals(key)) {
                 String displayText;
                 if (!isCurrentlyDisabled) {
@@ -4562,9 +4563,9 @@ if (foatInstance != null) {
                             "<font color='#FF5722'><small><b> (已禁用)</small></b></font>";
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    cb.setText(Html.fromHtml(displayText, Html.FROM_HTML_MODE_LEGACY));
+                    cb.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(displayText, Html.FROM_HTML_MODE_LEGACY));
                 } else {
-                    cb.setText(Html.fromHtml(displayText));
+                    cb.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(displayText));
                 }
             } else {
                 updateCheckBoxText(cb, label, !isCurrentlyDisabled);
@@ -4589,9 +4590,9 @@ if (foatInstance != null) {
                                     "<font color='#FF5722'><small><b> (已禁用)</small></b></font>";
                         }
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            cb.setText(Html.fromHtml(displayText, Html.FROM_HTML_MODE_LEGACY));
+                            cb.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(displayText, Html.FROM_HTML_MODE_LEGACY));
                         } else {
-                            cb.setText(Html.fromHtml(displayText));
+                            cb.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(displayText));
                         }
                     } else {
                         updateCheckBoxText(cb, label, isChecked);
@@ -4691,9 +4692,9 @@ private void updateCheckBoxText(CheckBox cb, String label, boolean isEnabled) {
                 "<font color='#FF5722'><small><b> (已禁用)</small></b></font>";
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        cb.setText(Html.fromHtml(displayText, Html.FROM_HTML_MODE_LEGACY));
+        cb.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(displayText, Html.FROM_HTML_MODE_LEGACY));
     } else {
-        cb.setText(Html.fromHtml(displayText));
+        cb.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(displayText));
     }
 }
  
@@ -4824,7 +4825,7 @@ private void updateCheckBoxText(CheckBox cb, String label, boolean isEnabled) {
         final Activity finalActivity = validActivity;
 
         if (finalActivity == null || finalActivity.isFinishing()) return;
-        new AlertDialog.Builder(finalActivity, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
+        new com.install.appinstall.xl.ru.RuDialogBuilder(finalActivity, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
                 .setTitle("切换状态")
                 .setItems(new String[]{"切换为已安装", "切换为未安装", "刷新配置"}, new DialogInterface.OnClickListener() {
                     @Override
@@ -4874,9 +4875,9 @@ private void updateCheckBoxText(CheckBox cb, String label, boolean isEnabled) {
                 "<font color='#9E9E9E'>• 开启：拦截所有第三方应用启动请求</font><br>" +
                 "<font color='#9E9E9E'>• 关闭：允许应用正常启动第三方程序</font><br>" +
                 "<font color='#9E9E9E'>• 列表：管理黑白名单/智能处理规则</font><br><br>";
-        final AlertDialog dialog = new AlertDialog.Builder(activity, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
+        final AlertDialog dialog = new com.install.appinstall.xl.ru.RuDialogBuilder(activity, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
                 .setTitle("启动拦截设置")
-                .setMessage(Html.fromHtml(htmlMessage))
+                .setMessage(com.install.appinstall.xl.ru.RuStrings.fromHtml(htmlMessage))
                 .setPositiveButton("开启启动拦截", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -4984,14 +4985,14 @@ private void updateCheckBoxText(CheckBox cb, String label, boolean isEnabled) {
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setPadding(30, 20, 30, 20);
 
-        final TextView statusLine = new TextView(activity);
+        final TextView statusLine = new com.install.appinstall.xl.ru.RuTextView(activity);
         statusLine.setText("权限防护：防护中 | 假装已授权(0)项");
         statusLine.setTextColor(0xFF333333);
         statusLine.setTextSize(14);
         statusLine.setPadding(0, 0, 0, 15);
         mainLayout.addView(statusLine);
 
-        TextView tipView = new TextView(activity);
+        TextView tipView = new com.install.appinstall.xl.ru.RuTextView(activity);
         tipView.setText("勾选对应权限将返回假装「已授权」\n取消全部勾选即关闭权限防护,放行应用检查\n请按需选择假装,部分权限假装后可能出现异常或无效！");
         tipView.setTextColor(0xFFFF0000);
         tipView.setTextSize(10);
@@ -5003,20 +5004,20 @@ private void updateCheckBoxText(CheckBox cb, String label, boolean isEnabled) {
         topBar.setOrientation(LinearLayout.HORIZONTAL);
         topBar.setGravity(Gravity.CENTER_VERTICAL);
 
-        final Button toggleSelectAllBtn = new Button(activity);
+        final Button toggleSelectAllBtn = new com.install.appinstall.xl.ru.RuButton(activity);
         toggleSelectAllBtn.setText("全选");
         toggleSelectAllBtn.setPadding(20, 8, 20, 8);
         toggleSelectAllBtn.setTextColor(0xFFFFFFFF);
         toggleSelectAllBtn.setBackground(getRoundButtonDrawable(0xFF2196F3));
 
-        final Button filterBtn = new Button(activity);
+        final Button filterBtn = new com.install.appinstall.xl.ru.RuButton(activity);
         filterBtn.setText("默认权限");
         filterBtn.setPadding(20, 8, 20, 8);
         filterBtn.setTextColor(0xFFFFFFFF);
         filterBtn.setBackground(getRoundButtonDrawable(0xFF2196F3));
         final boolean[] filterDefaultOnly = new boolean[]{false};
 
-        Button cleanConfigBtn = new Button(activity);
+        Button cleanConfigBtn = new com.install.appinstall.xl.ru.RuButton(activity);
         cleanConfigBtn.setText("清理配置");
         cleanConfigBtn.setPadding(20, 8, 20, 8);
         cleanConfigBtn.setTextColor(0xFFFFFFFF);
@@ -5091,7 +5092,7 @@ private void updateCheckBoxText(CheckBox cb, String label, boolean isEnabled) {
                         continue;
                     }
 
-                    final CheckBox cb = new CheckBox(activity);
+                    final CheckBox cb = new com.install.appinstall.xl.ru.RuCheckBox(activity);
                     String friendly = PermissionName.getFriendlyName(perm);
                     if (friendly == null || friendly.trim().isEmpty()) {
                         friendly = perm;
@@ -5137,7 +5138,7 @@ private void updateCheckBoxText(CheckBox cb, String label, boolean isEnabled) {
                 }
 
                 if (listContainer.getChildCount() == 0) {
-                    TextView empty = new TextView(activity);
+                    TextView empty = new com.install.appinstall.xl.ru.RuTextView(activity);
                     empty.setText("没有匹配的权限");
                     empty.setPadding(20, 50, 20, 50);
                     empty.setTextColor(0xFF999999);
@@ -5468,7 +5469,7 @@ private void clearPermissionCache(Context context) {
             titleLayout.setGravity(Gravity.CENTER_VERTICAL);
             titleLayout.setPadding(80, 20, 20, 20);
 
-            TextView titleText = new TextView(activity);
+            TextView titleText = new com.install.appinstall.xl.ru.RuTextView(activity);
             titleText.setText("管理配置/悬浮窗设置");
             titleText.setTextSize(18);
             titleText.setTextColor(0xFF333333);
@@ -5477,7 +5478,7 @@ private void clearPermissionCache(Context context) {
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT, 1));
 
-            Button permHideBtn = new Button(activity);
+            Button permHideBtn = new com.install.appinstall.xl.ru.RuButton(activity);
             permHideBtn.setText("隐藏悬浮窗(长期)");
             permHideBtn.setTextSize(12);
             permHideBtn.setPadding(20, 20, 20, 20);
@@ -5698,7 +5699,7 @@ private void clearPermissionCache(Context context) {
         }
         final Activity finalActivity = validActivity;
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(finalActivity, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT).setTitle(title);
+        AlertDialog.Builder builder = new com.install.appinstall.xl.ru.RuDialogBuilder(finalActivity, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT).setTitle(title);
         if (customView != null) {
             if (customView.getParent() != null) {
                 ((ViewGroup) customView.getParent()).removeView(customView);
@@ -5715,9 +5716,9 @@ private void clearPermissionCache(Context context) {
             builder.setView(scrollView);
         } else if (message != null && !message.isEmpty()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                builder.setMessage(Html.fromHtml(message, Html.FROM_HTML_MODE_LEGACY));
+                builder.setMessage(com.install.appinstall.xl.ru.RuStrings.fromHtml(message, Html.FROM_HTML_MODE_LEGACY));
             } else {
-                builder.setMessage(Html.fromHtml(message));
+                builder.setMessage(com.install.appinstall.xl.ru.RuStrings.fromHtml(message));
             }
         }
 
@@ -7065,11 +7066,11 @@ if (finalIdentifier != null) {
             LinearLayout contentLayout = new LinearLayout(activity);
             contentLayout.setOrientation(LinearLayout.VERTICAL);
             contentLayout.setPadding(40, 30, 40, 30);
-            TextView msgView = new TextView(activity);
+            TextView msgView = new com.install.appinstall.xl.ru.RuTextView(activity);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                msgView.setText(Html.fromHtml(msg, Html.FROM_HTML_MODE_LEGACY));
+                msgView.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(msg, Html.FROM_HTML_MODE_LEGACY));
             } else {
-                msgView.setText(Html.fromHtml(msg));
+                msgView.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(msg));
             }
             msgView.setTextIsSelectable(true);
             msgView.setTextSize(14);
@@ -7081,7 +7082,7 @@ if (finalIdentifier != null) {
                 divider.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
                 divider.setBackgroundColor(0xFFE0E0E0);
                 contentLayout.addView(divider);
-                Button autoBtn = new Button(activity);
+                Button autoBtn = new com.install.appinstall.xl.ru.RuButton(activity);
                 autoBtn.setText("⚙ 设置自动处理");
                 autoBtn.setTextSize(14);
                 autoBtn.setPadding(40, 15, 40, 15);

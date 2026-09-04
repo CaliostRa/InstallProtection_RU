@@ -19,3 +19,9 @@ allprojects {
 tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
+
+tasks.register('localizationTest', Exec) {
+    group = 'verification'
+    description = 'Runs localization and Xposed/LSPatch compatibility invariants.'
+    commandLine 'python3', '-m', 'unittest', 'tools.tests.test_source_localization', '-v'
+}

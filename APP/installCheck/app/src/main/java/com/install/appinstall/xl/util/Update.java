@@ -44,10 +44,10 @@ import java.util.concurrent.Executors;
  */
 public class Update {
 
-    private static final String GITHUB_API_LATEST = "https://api.github.com/repos/yijun01/com.install.appinstall.xl/releases/latest";
+    private static final String GITHUB_API_LATEST = "https://api.github.com/repos/CaliostRa/InstallProtection_RU/releases/latest";
     private static final String MODULE_PACKAGE = "com.install.appinstall.xl";
     private static final String MODULE_MAIN_ACTIVITY = MODULE_PACKAGE + ".MainActivity";
-    private static final String GITHUB_RELEASES_URL = "https://github.com/yijun01/com.install.appinstall.xl/releases";
+    private static final String GITHUB_RELEASES_URL = "https://github.com/CaliostRa/InstallProtection_RU/releases";
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
@@ -374,7 +374,7 @@ public class Update {
                                        ViewGroup.LayoutParams.WRAP_CONTENT));
         scrollView.setFillViewport(true);
 
-        TextView textView = new TextView(activity);
+        TextView textView = new com.install.appinstall.xl.ru.RuTextView(activity);
         textView.setText(message);
         textView.setTextSize(13);
         textView.setPadding(60, 20, 60, 20);  //左上右下
@@ -382,7 +382,7 @@ public class Update {
         textView.setTextIsSelectable(true);
         scrollView.addView(textView);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
+        AlertDialog.Builder builder = new com.install.appinstall.xl.ru.RuDialogBuilder(activity, AlertDialog.THEME_DEVICE_DEFAULT_LIGHT)
             .setTitle(title)
             .setView(scrollView);
 
@@ -535,9 +535,9 @@ public class Update {
 
     private static Spanned fromHtml(String html) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY);
+            return com.install.appinstall.xl.ru.RuStrings.fromHtml(html, Html.FROM_HTML_MODE_LEGACY);
         } else {
-            return Html.fromHtml(html);
+            return com.install.appinstall.xl.ru.RuStrings.fromHtml(html);
         }
     }
 

@@ -610,7 +610,7 @@ public class Portcf {
             }
         }
 
-        Button cleanBtn = new Button(activity);
+        Button cleanBtn = new com.install.appinstall.xl.ru.RuButton(activity);
         cleanBtn.setText("清理配置");
         cleanBtn.setPadding(20, 10, 20, 10);
         cleanBtn.setTextColor(0xFFFFFFFF);
@@ -732,11 +732,11 @@ public class Portcf {
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setPadding(40, 20, 40, 20);
 
-        TextView tipText = new TextView(activity);
+        TextView tipText = new com.install.appinstall.xl.ru.RuTextView(activity);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            tipText.setText(Html.fromHtml("<b>请选择要<font color='#FF5722'><b>导入</b></font>的配置文件</b>", Html.FROM_HTML_MODE_LEGACY));
+            tipText.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml("<b>请选择要<font color='#FF5722'><b>导入</b></font>的配置文件</b>", Html.FROM_HTML_MODE_LEGACY));
         } else {
-            tipText.setText(Html.fromHtml("<b>请选择要<font color='#FF5722'><b>导入</b></font>的配置文件</b>"));
+            tipText.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml("<b>请选择要<font color='#FF5722'><b>导入</b></font>的配置文件</b>"));
         }
         tipText.setTextColor(0xFFFF5722);
         tipText.setTextSize(12);
@@ -781,13 +781,13 @@ public class Portcf {
             itemLayout.setPadding(30, 10, 30, 10);
             itemLayout.setBackgroundColor(0x00000000);
 
-            final TextView nameView = new TextView(activity);
+            final TextView nameView = new com.install.appinstall.xl.ru.RuTextView(activity);
             nameView.setText(displayName);
             nameView.setTextColor(0xFF333333);
             nameView.setTextSize(14);
             itemLayout.addView(nameView);
 
-            final TextView timeView = new TextView(activity);
+            final TextView timeView = new com.install.appinstall.xl.ru.RuTextView(activity);
             timeView.setText(timeStr);
             timeView.setTextColor(0xFF888888);
             timeView.setTextSize(11);
@@ -880,7 +880,7 @@ public class Portcf {
                 LinearLayout pkgLayout = new LinearLayout(activity);
                 pkgLayout.setOrientation(LinearLayout.VERTICAL);
                 pkgLayout.setPadding(40, 20, 40, 20);
-                TextView pkgMsg = new TextView(activity);
+                TextView pkgMsg = new com.install.appinstall.xl.ru.RuTextView(activity);
                 pkgMsg.setText("请选择要导入的来源包名：");
                 pkgMsg.setTextSize(14);
                 pkgMsg.setTextColor(0xFF333333);
@@ -898,7 +898,7 @@ public class Portcf {
                     final LinearLayout item = new LinearLayout(activity);
                     item.setOrientation(LinearLayout.HORIZONTAL);
                     item.setPadding(20, 10, 20, 10);
-                    final TextView pkgTv = new TextView(activity);
+                    final TextView pkgTv = new com.install.appinstall.xl.ru.RuTextView(activity);
                     pkgTv.setText(pkg);
                     pkgTv.setTextSize(14);
                     pkgTv.setTextColor(0xFF333333);
@@ -1153,18 +1153,18 @@ public class Portcf {
         LinearLayout layout = new LinearLayout(activity);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(40, 20, 40, 10);
-        TextView titleView = new TextView(activity);
+        TextView titleView = new com.install.appinstall.xl.ru.RuTextView(activity);
         titleView.setText(title);
         titleView.setTextSize(18);
         titleView.setTextColor(0xFF333333);
         titleView.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
         layout.addView(titleView);
         if (tip != null && !tip.isEmpty()) {
-            TextView tipView = new TextView(activity);
+            TextView tipView = new com.install.appinstall.xl.ru.RuTextView(activity);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                tipView.setText(Html.fromHtml(tip, Html.FROM_HTML_MODE_LEGACY));
+                tipView.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(tip, Html.FROM_HTML_MODE_LEGACY));
             } else {
-                tipView.setText(Html.fromHtml(tip));
+                tipView.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(tip));
             }
             tipView.setTextColor(0xFFFF5722);
             tipView.setTextSize(12);
@@ -1201,11 +1201,11 @@ public class Portcf {
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setPadding(40, 20, 40, 20);
 
-        TextView tip = new TextView(activity);
+        TextView tip = new com.install.appinstall.xl.ru.RuTextView(activity);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            tip.setText(Html.fromHtml("<b>请选择要<font color='#FF5722'><b>删除</b></font>的配置文件：</b>", Html.FROM_HTML_MODE_LEGACY));
+            tip.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml("<b>请选择要<font color='#FF5722'><b>删除</b></font>的配置文件：</b>", Html.FROM_HTML_MODE_LEGACY));
         } else {
-            tip.setText(Html.fromHtml("<b>请选择要<font color='#FF5722'><b>删除</b></font>的配置文件：</b>"));
+            tip.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml("<b>请选择要<font color='#FF5722'><b>删除</b></font>的配置文件：</b>"));
         }
         tip.setTextColor(0xFF333333);
         tip.setTextSize(14);
@@ -1252,13 +1252,13 @@ public class Portcf {
             itemLayout.setPadding(10, 5, 10, 5);
             itemLayout.setBackgroundColor(0x00000000);
 
-            final CheckBox cb = new CheckBox(activity);
+            final CheckBox cb = new com.install.appinstall.xl.ru.RuCheckBox(activity);
             cb.setText(displayName);
             cb.setTextSize(14);
             cb.setTextColor(0xFF333333);
             itemLayout.addView(cb);
 
-            TextView timeView = new TextView(activity);
+            TextView timeView = new com.install.appinstall.xl.ru.RuTextView(activity);
             timeView.setText(timeStr);
             timeView.setTextColor(0xFF888888);
             timeView.setTextSize(11);
@@ -1393,7 +1393,7 @@ public class Portcf {
         topBar.setOrientation(LinearLayout.HORIZONTAL);
         topBar.setGravity(Gravity.CENTER_VERTICAL);
 
-        final Button toggleAllBtn = new Button(activity);
+        final Button toggleAllBtn = new com.install.appinstall.xl.ru.RuButton(activity);
         toggleAllBtn.setText("全选");
         toggleAllBtn.setPadding(20, 10, 20, 10);
         toggleAllBtn.setTextColor(0xFFFFFFFF);
@@ -1447,7 +1447,7 @@ public class Portcf {
             final String finalBaseText = baseText;
             final String finalState = state;
 
-            final CheckBox cb = new CheckBox(activity);
+            final CheckBox cb = new com.install.appinstall.xl.ru.RuCheckBox(activity);
             boolean checked = selectedMap.getOrDefault(key, true);
             updateCheckBoxText(cb, finalBaseText, finalState, checked, showStatus);
             cb.setChecked(checked);
@@ -1510,9 +1510,9 @@ public class Portcf {
             text = "<b><font color='#F44336'>" + content + " </font><font color='#FF5722'><small>(已禁用)</small></font></b>";
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            cb.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY));
+            cb.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(text, Html.FROM_HTML_MODE_LEGACY));
         } else {
-            cb.setText(Html.fromHtml(text));
+            cb.setText(com.install.appinstall.xl.ru.RuStrings.fromHtml(text));
         }
     }
 

@@ -101,18 +101,18 @@ public class Spkill {
         titleLayout.setOrientation(LinearLayout.HORIZONTAL);
         titleLayout.setGravity(Gravity.CENTER_VERTICAL);
         titleLayout.setPadding(0, 0, 0, 20);
-        TextView title = new TextView(activity);
+        TextView title = new com.install.appinstall.xl.ru.RuTextView(activity);
         title.setText("拦截列表（共" + patterns.size() + "条记录）");
         title.setTextSize(16);
         title.setTextColor(0xFF333333);
         title.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
         titleLayout.addView(title);
-        final Button selectAllBtn = new Button(activity);
+        final Button selectAllBtn = new com.install.appinstall.xl.ru.RuButton(activity);
         selectAllBtn.setText("全选");
         setRoundButtonBackground(selectAllBtn, 0xAA4CAF50);
         selectAllBtn.setPadding(20, 8, 20, 8);
         titleLayout.addView(selectAllBtn);
-        Button deleteAllBtn = new Button(activity);
+        Button deleteAllBtn = new com.install.appinstall.xl.ru.RuButton(activity);
         deleteAllBtn.setText("全部删除");
         setRoundButtonBackground(deleteAllBtn, 0xAAF44336);
         deleteAllBtn.setPadding(20, 8, 20, 8);
@@ -169,7 +169,7 @@ public class Spkill {
             topRow.setOrientation(LinearLayout.HORIZONTAL);
             topRow.setGravity(Gravity.CENTER_VERTICAL);
 
-            final CheckBox checkBox = new CheckBox(activity);
+            final CheckBox checkBox = new com.install.appinstall.xl.ru.RuCheckBox(activity);
             checkBox.setTag(hash);
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
@@ -199,7 +199,7 @@ public class Spkill {
             String silentText = pattern.silentIntercept ? " (已自动处理)" : "";
             String summary = String.format("%s\n包名: %s\n%s (已选择%d次)%s",
                                            hashDisplay, pkgPreview.toString(), choiceText, pattern.choiceCount, silentText);
-            TextView info = new TextView(activity);
+            TextView info = new com.install.appinstall.xl.ru.RuTextView(activity);
             info.setText(summary);
             info.setTextSize(12);
             info.setTextColor(0xFF666666);
@@ -212,7 +212,7 @@ public class Spkill {
             btnRow.setGravity(Gravity.END);
             btnRow.setPadding(0, 10, 0, 0);
 
-            Button modifyBtn = new Button(activity);
+            Button modifyBtn = new com.install.appinstall.xl.ru.RuButton(activity);
             modifyBtn.setText("修改");
             modifyBtn.setTextSize(12);
             setRoundButtonBackground(modifyBtn, 0xAA2196F3);
@@ -228,7 +228,7 @@ public class Spkill {
                 });
             btnRow.addView(modifyBtn);
 
-            Button delBtn = new Button(activity);
+            Button delBtn = new com.install.appinstall.xl.ru.RuButton(activity);
             delBtn.setText("删除");
             delBtn.setTextSize(12);
             setRoundButtonBackground(delBtn, 0xAAF44336);
@@ -295,7 +295,7 @@ public class Spkill {
         bottomBar.setOrientation(LinearLayout.HORIZONTAL);
         bottomBar.setPadding(0, 20, 0, 0);
 
-        Button batchModifyBtn = new Button(activity);
+        Button batchModifyBtn = new com.install.appinstall.xl.ru.RuButton(activity);
         batchModifyBtn.setText("批量修改");
         batchModifyBtn.setTextSize(12);
         setRoundButtonBackground(batchModifyBtn, 0xAA2196F3);
@@ -405,7 +405,7 @@ public class Spkill {
         spacer.setLayoutParams(new LinearLayout.LayoutParams((int) (8 * activity.getResources().getDisplayMetrics().density), 1));
         bottomBar.addView(spacer);
 
-        Button batchDeleteBtn = new Button(activity);
+        Button batchDeleteBtn = new com.install.appinstall.xl.ru.RuButton(activity);
         batchDeleteBtn.setText("批量删除");
         batchDeleteBtn.setTextSize(12);
         setRoundButtonBackground(batchDeleteBtn, 0xAAFF9800);
@@ -504,7 +504,7 @@ public class Spkill {
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(40, 20, 40, 20);
 
-        TextView tip = new TextView(activity);
+        TextView tip = new com.install.appinstall.xl.ru.RuTextView(activity);
         tip.setText("请选择修改方式：");
         tip.setTextSize(14);
         tip.setTextColor(0xFF333333);
@@ -1193,7 +1193,10 @@ public class Spkill {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+                            Toast.makeText(
+                                    context,
+                                    com.install.appinstall.xl.ru.RuStrings.translate(message),
+                                    Toast.LENGTH_LONG).show();
                         }
                     });
             } else {
