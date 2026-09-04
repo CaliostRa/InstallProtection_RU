@@ -2,41 +2,52 @@
 
 ## Целевая сборка
 
-- upstream tag: `234-2.1.60`;
-- upstream commit: `3e930ddc1bc601d88255cd9f214a4b9a35e97327`;
-- official APK SHA256: `cc3197e4e63e8e3c74b05ee54b629539eb59a5b2d9937e8ee486b536fd334720`;
+- upstream release: `241-2.1.68`;
+- точный upstream source commit: `5e584196f38568ccfd9a68b4d54a9a1117179010`;
 - package: `com.install.appinstall.xl`;
 - Xposed entry: `com.install.appinstall.xl.HookInit`;
 - LSPatch provider: `com.install.appinstall.xl.HookInit$HookProvider`.
 
-## Что локализуется
+## Как устроена локализация
 
-`localization/ru-strings.json` содержит 1208 вручную проверенных upstream-строк и два контекстных сокращения для overlay. Перевод применяется только непосредственно перед Android presentation API: `TextView`/`Button`/`EditText`, `AlertDialog`, `Toast`, `Html.fromHtml()` и массивы пунктов диалога. Проверка `Locale.getDefault().getLanguage().equals("ru")` выполняется внутри `RuStrings`; для других языков возвращается оригинал.
+Статические metadata и элементы главного экрана, добавленные форком, используют одинаковый набор ключей в `res/values/strings.xml` и `res/values-ru/strings.xml`. Для русской locale имя приложения — `InstallProtection_RU`; для остальных locale остаётся исходный китайский язык.
 
-Android resources дополняются `res/values-ru/strings.xml` для app label, статуса Xposed и описания модуля. Default `res/values/strings.xml` остаётся оригинальным.
+Основной upstream UI версии 2.1.68 создаётся программно в Java. Чтобы не переписывать hook-код и не разносить тысячи точечных изменений, его исходные литералы сохранены, а перевод применяется только при выводе через locale-aware классы `RuTextView`, `RuButton`, `RuCheckBox`, `RuRadioButton`, `RuDialogBuilder`, HTML/Toast helpers. При не-русской locale helper возвращает исходную строку.
+
+`localization/ru-strings.json` содержит 2555 проверенных пар. `tools/generate_ru_catalog.py` воспроизводимо создаёт Java-каталог, а `tools/audit_translations.py` проверяет все китайские Java-литералы активного app-модуля. Копия журнала в буфер обмена локализуется тем же presentation helper.
 
 ## Сознательно оставленный китайский текст
 
-1. Ключи JSON-словаря — это оригинальные строки сопоставления. Они находятся внутри APK, но заменяются только при передаче пользовательского текста в presentation API.
-2. Default и `values-zh` resources — оригинальный язык для всех locale, кроме русской.
-3. `退出` и `关闭` — hook-match шаблоны кнопок целевого китайского приложения. Их перевод изменил бы package-detection/exit behavior.
-4. `伪造App` — значение, подставляемое целевому приложению как fake app name. Оно не является интерфейсом модуля и сохранено ради совместимости.
-5. JSON bodies, synthetic `dumpsys`, `packages.xml`, shell output и прочие данные, возвращаемые целевому приложению, не локализуются.
-6. Имя оригинального автора `永恒之蓝（小淋）` сохранено как copyright/attribution.
-7. Комментарии и исторические снимки в `Opensource-1.3/` и старом `APP/installCheck` не являются кодом целевой APK 2.1.60 и оставлены для upstream history.
+Полный grep по репозиторию продолжает находить Han-символы в следующих категориях:
 
-## Hook-логика
+1. Китайские ключи `localization/ru-strings.json` и сгенерированного `RuCatalog.java`. Они нужны для точного сопоставления с upstream-строками.
+2. Исходные Java-литералы активного модуля. Они сохраняют оригинальный интерфейс для не-русских locale и облегчают будущий upstream sync; для русской locale их отображаемая часть покрыта каталогом. Автоматический audit сообщает `Residual Chinese literals: 0` после применения каталога.
+3. `res/values/strings.xml` и `res/values-zh/strings.xml` — исходный/default язык по требованию fork-а.
+4. Четыре значения из `localization/han-allowlist.json`, которые являются функциональными данными, а не интерфейсом:
+   - `com.小淋.虚假APP` — служебный package ID upstream;
+   - `虚假APP` — подставляемое hook-механизмом значение `appName`;
+   - JSON `code=200` с `msg=检测通过`;
+   - JSON `code=404` с `msg=应用未安装`.
+5. Комментарии исходного Java-кода, имя автора `永恒之蓝（小淋）`, оригинальные README/LICENSE и неизменённый исторический snapshot `OpenSource-2.1.68/`. Они не являются непереведённым русским UI.
 
-Алгоритмы PackageManager, VPN/proxy, `/proc/net`, NetworkInterface, SSL, anti-Xposed, SELinux, ADB/Developer Options, overlay и LSPatch не переписываются. `obfuse.NPStringFog`, `HookInit`, `PkgMgr`, `VpnStatusFaker`, `AntiDetection`, `Selinuxhook` и `ShareHook` остаются байт-в-байт исходными.
+Package IDs, имена методов, API-константы, пути и технические маркеры (`PackageManager`, `getNetworkInterfaces`, `NetworkCapabilities`, `/proc/net`, `SELinux`, `TRANSPORT_VPN`, `NOT_VPN` и другие) каталог не переводит.
 
-Патч изменяет только 14 обфусцированных proxy-классов, которые непосредственно вызывают 18 presentation sinks, и добавляет новый locale-gated `RuStrings`. Функциональные String sinks — `Intent`, JSON, reflection, Xposed, команды, пути, package ID и сетевые API — не инструментируются.
+## Hook-логика и совместимость
+
+Алгоритмы PackageManager, VPN/proxy, `/proc/net`, NetworkInterface, SSL, anti-Xposed, SELinux, ADB/Developer Options, package detection, overlay и LSPatch не перерабатывались. Изменения активных Java-файлов ограничены presentation sinks и ссылкой проверки обновлений на RU-форк. `applicationId`, provider и `assets/xposed_init` сохранены.
+
+Два дублирующихся `case` в upstream `PermissionName.java`, не позволявшие исходнику компилироваться, были удалены при подготовке source build; первое исходное отображаемое значение каждого case сохранено.
 
 ## Layout и плавающее окно
 
-В APK есть только пустой `activity_main.xml` с `match_parent`; основной интерфейс и overlay создаются программно. Жёстких XML-ширин для исправления нет, параметры окон не изменялись. Для полного составного текста добавлены контекстные сокращения: «Защита: есть [перехват]» и «Защита: нет [перехват]».
+Основной UI и overlay формируются программно. Для длинного русского footer строки размещены вертикально. Маленькое overlay использует короткие варианты:
 
-## Ограничения проверки
+- `Защита: есть [блок.]`;
+- `Защита: нет [блок.]`.
 
-- Инструментальная проверка на реальном Android/LSPosed/LSPatch устройстве в CI отсутствует.
-- Основной интерфейс программный, XML layout пустой; размеры проверяются косвенно короткими overlay-переводами и отсутствием изменения layout params.
-- Новые upstream-релизы нельзя подменять без повторного аудита DEX, entry points и строкового каталога.
+## Проверки и ограничения
+
+- `python3 -m unittest tools.tests.test_source_localization -v` проверяет catalog/resources, package/version/Xposed invariants, технические токены и presentation sinks.
+- `./gradlew assembleDebug` и `./gradlew assembleRelease` компилируют активный source module; release без внешнего ключа намеренно unsigned.
+- Инструментальная проверка всех экранов на реальном Android с LSPosed/LSPatch в CI отсутствует. Перед первым публичным релизом рекомендуется smoke-test на физическом устройстве: главный экран, package list, дополнительные настройки, VPN/proxy, скрытие следов, realtime logs, overlay и импорт/экспорт.
+- Полный `:app:lintDebug` показывает накопленные upstream lint-проблемы в hook-коде. `lintVitalRelease` проходит; lint не отключён и ошибки не скрыты через `abortOnError false`.
