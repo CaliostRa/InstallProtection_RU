@@ -24,8 +24,8 @@ android {
         applicationId "com.install.appinstall.xl"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 241
-        versionName "2.1.68"
+        versionCode 24103
+        versionName "2.1.68-ru3"
     }
 
     signingConfigs {

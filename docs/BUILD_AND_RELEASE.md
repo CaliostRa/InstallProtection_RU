@@ -16,8 +16,8 @@
 
 Артефакты:
 
-- `APP/installCheck/app/build/outputs/apk/debug/InstallProtection_RU-2.1.68-debug.apk`
-- `APP/installCheck/app/build/outputs/apk/release/InstallProtection_RU-2.1.68-release-unsigned.apk`
+- `APP/installCheck/app/build/outputs/apk/debug/InstallProtection_RU-2.1.68-ru3-debug.apk`
+- `APP/installCheck/app/build/outputs/apk/release/InstallProtection_RU-2.1.68-ru3-release-unsigned.apk`
 
 ## Локальная подписанная release-сборка
 
@@ -58,11 +58,16 @@ export ANDROID_KEY_PASSWORD='...'
 Пример:
 
 ```text
-versionCode 242
-v242-2.1.68-ru3
+versionCode 24103
+versionName "2.1.68-ru3"
+v24103-2.1.68-ru3
 ```
 
 Один только суффикс `ru1`, `ru2`, `ru3` не делает релиз новым для встроенного update-checker, если первое число тега и `versionCode` остаются прежними.
+
+С `ru3` используется схема `upstream versionCode × 100 + RU-ревизия` (ревизии от 1 до 99). Например, `241 / ru3` даёт `24103`, следующий RU-релиз той же базы — `24104`, а первая сборка upstream `242` — `24201`. Не возвращайте необработанный upstream `versionCode` при синхронизации. Перед каждым релизом сравнивайте номер с последним опубликованным APK; для более чем 99 ревизий одной базы потребуется новая монотонная схема.
+
+У `ru1` и `ru2` Android-версия оставалась `241 / 2.1.68`, поэтому её нельзя использовать для различения этих сборок. `ru3` повышает оба поля и устанавливается поверх них при совпадении подписи. Проверка на сервере Komi не подтверждает наличие уведомления на конкретном телефоне: также учитываются привязка репозитория, настройки проверки обновлений и локальный кэш.
 
 ## Постоянная подпись RU-форка
 
